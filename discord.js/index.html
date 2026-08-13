@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>💰 Discord Economy</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top,#1d2845 0,#0b0f19 42%,#070a11 100%);
+    color:#f5f7ff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+}
+
+.header{
+    padding:28px 18px;
+    text-align:center;
+    background:rgba(17,24,39,.88);
+    border-bottom:1px solid #29344b;
+    backdrop-filter:blur(12px);
+}
+
+.header h1{
+    margin:0;
+    font-size:30px;
+}
+
+.header p{
+    margin:8px 0 0;
+    color:#9ca8bc;
+}
+
+.status{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:14px;
+    padding:7px 13px;
+    border-radius:999px;
+    background:#10261a;
+    color:#57f287;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#57f287;
+    box-shadow:0 0 10px #57f287;
+}
+
+.container{
+    width:min(1100px,calc(100% - 24px));
+    margin:24px auto 50px;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.card{
+    background:rgba(17,24,39,.9);
+    border:1px solid #29344b;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 10px 35px rgba(0,0,0,.18);
+}
+
+.login{
+    min-height:55vh;
+    display:grid;
+    place-items:center;
+    text-align:center;
+}
+
+.login-box{
+    max-width:480px;
+}
+
+.login-icon{
+    font-size:64px;
+    margin-bottom:10px;
+}
+
+.login h2{
+    margin:0 0 10px;
+    font-size:28px;
+}
+
+.muted{
+    color:#98a5ba;
+}
+
+.discord-login{
+    margin-top:20px;
+    padding:14px 22px;
+    border-radius:11px;
+    background:#5865f2;
+    color:#fff;
+    font-weight:700;
+    box-shadow:0 8px 22px rgba(88,101,242,.25);
+}
+
+.discord-login:hover{
+    background:#4752c4;
+}
+
+.profile{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.profile-left{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.avatar{
+    width:62px;
+    height:62px;
+    border-radius:50%;
+    object-fit:cover;
+    background:#222b3d;
+    border:2px solid #5865f2;
+}
+
+.username{
+    margin:0 0 5px;
+    font-size:21px;
+}
+
+.logout{
+    padding:10px 14px;
+    border-radius:9px;
+    background:#ed4245;
+    color:white;
+    font-weight:bold;
+}
+
+.logout:hover{
+    background:#c93639;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+    gap:14px;
+}
+
+.stat-card{
+    min-height:125px;
+}
+
+.stat-label{
+    color:#9ca8bc;
+    font-size:14px;
+}
+
+.stat-value{
+    margin-top:10px;
+    font-size:27px;
+    font-weight:800;
+}
+
+.stat-icon{
+    font-size:25px;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+    gap:14px;
+}
+
+.action{
+    background:#0c1220;
+    border:1px solid #29344b;
+    border-radius:14px;
+    padding:17px;
+}
+
+.action h3{
+    margin:0 0 8px;
+}
+
+.action p{
+    margin:0 0 14px;
+    color:#98a5ba;
+    font-size:14px;
+}
+
+.action-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+input{
+    width:100%;
+    padding:11px 12px;
+    margin-bottom:9px;
+    border:1px solid #344057;
+    border-radius:9px;
+    outline:none;
+    background:#080d17;
+    color:#fff;
+}
+
+input:focus{
+    border-color:#5865f2;
+}
+
+.primary{
+    padding:10px 14px;
+    border-radius:9px;
+    background:#5865f2;
+    color:#fff;
+    font-weight:bold;
+}
+
+.primary:hover{
+    background:#4752c4;
+}
+
+.green{
+    background:#248046;
+}
+
+.green:hover{
+    background:#1d6838;
+}
+
+.red{
+    background:#ed4245;
+}
+
+.secondary{
+    padding:10px 14px;
+    border-radius:9px;
+    background:#30384c;
+    color:white;
+    font-weight:bold;
+}
+
+.message{
+    min-height:21px;
+    margin-top:10px;
+    font-size:14px;
+}
+
+.success{
+    color:#57f287;
+}
+
+.error{
+    color:#ff6b6b;
+}
+
+.coin-buttons{
+    display:flex;
+    gap:8px;
+}
+
+.coin-buttons button{
+    flex:1;
+}
+
+.leader-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.leader-header h2{
+    margin:0;
+}
+
+.refresh{
+    padding:8px 11px;
+    border-radius:8px;
+    background:#30384c;
+    color:white;
+}
+
+.leader-row{
+    display:grid;
+    grid-template-columns:48px 1fr 150px;
+    align-items:center;
+    gap:10px;
+    padding:12px 4px;
+    border-top:1px solid #29344b;
+}
+
+.rank{
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.player{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+}
+
+.player-avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    object-fit:cover;
+    background:#222b3d;
+}
+
+.player-name{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.player-small{
+    color:#7f8ba0;
+    font-size:12px;
+    margin-top:3px;
+}
+
+.total{
+    text-align:right;
+    font-weight:800;
+}
+
+.economy-summary{
+    display:grid;
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+    gap:12px;
+    margin-top:14px;
+}
+
+.summary{
+    padding:13px;
+    border-radius:11px;
+    background:#0c1220;
+    border:1px solid #29344b;
+}
+
+.summary strong{
+    display:block;
+    margin-top:5px;
+    font-size:18px;
+}
+
+.footer{
+    text-align:center;
+    color:#66738a;
+    font-size:13px;
+    padding:20px;
+}
+
+.loading{
+    padding:20px;
+    text-align:center;
+    color:#98a5ba;
+}
+
+@media(max-width:700px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+    .profile{
+        align-items:flex-start;
+    }
+
+    .leader-row{
+        grid-template-columns:40px 1fr 105px;
+    }
+
+    .total{
+        font-size:13px;
+    }
+
+}
+
+@media(max-width:430px){
+
+    .header h1{
+        font-size:25px;
+    }
+
+    .container{
+        width:min(100% - 14px,1100px);
+        margin-top:14px;
+    }
+
+    .card{
+        padding:14px;
+    }
+
+    .leader-row{
+        grid-template-columns:34px 1fr 90px;
+        gap:5px;
+    }
+
+    .player-avatar{
+        width:32px;
+        height:32px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>💰 Discord Economy</h1>
+
+<p>
+Your real Discord economy dashboard
+</p>
+
+<div class="status">
+<span class="status-dot"></span>
+<span>Bot Online</span>
+</div>
+
+</header>
+
+
+<main class="container">
+
+
+<!-- =========================
+     LOGIN
+========================= -->
+
+<section id="loginScreen" class="card login">
+
+<div class="login-box">
+
+<div class="login-icon">
+💰
+</div>
+
+<h2>Welcome to the Economy</h2>
+
+<p class="muted">
+Login with Discord to create or access your economy account.
+</p>
+
+<button
+class="discord-login"
+onclick="loginWithDiscord()">
+
+🔵 Login with Discord
+
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     DASHBOARD
+========================= -->
+
+<section
+id="dashboard"
+class="hidden">
+
+
+<!-- PROFILE -->
+
+<div class="card">
+
+<div class="profile">
+
+<div class="profile-left">
+
+<img
+id="avatar"
+class="avatar"
+src=""
+alt="Avatar">
+
+<div>
+
+<h2
+id="username"
+class="username">
+Loading...
+</h2>
+
+<div class="muted">
+Discord Economy Account
+</div>
+
+</div>
+
+</div>
+
+<button
+class="logout"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     STATS
+========================= -->
+
+<div class="stats">
+
+<div class="card stat-card">
+
+<div class="stat-icon">
+💵
+</div>
+
+<div class="stat-label">
+Cash
+</div>
+
+<div
+id="cash"
+class="stat-value">
+
+$0
+
+</div>
+
+</div>
+
+
+<div class="card stat-card">
+
+<div class="stat-icon">
+🏦
+</div>
+
+<div class="stat-label">
+Bank
+</div>
+
+<div
+id="bank"
+class="stat-value">
+
+$0
+
+</div>
+
+</div>
+
+
+<div class="card stat-card">
+
+<div class="stat-icon">
+💰
+</div>
+
+<div class="stat-label">
+Total Wealth
+</div>
+
+<div
+id="total"
+class="stat-value">
+
+$0
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     ACTIONS
+========================= -->
+
+<div class="card">
+
+<h2>
+🎮 Economy Commands
+</h2>
+
+<div class="actions">
+
+
+<!-- COINFLIP -->
+
+<div class="action">
+
+<h3>
+🪙 Coinflip
+</h3>
+
+<p>
+Bet your cash on heads or tails.
+</p>
+
+<input
+id="coinAmount"
+type="number"
+min="1"
+placeholder="Bet amount">
+
+<div class="coin-buttons">
+
+<button
+class="primary"
+onclick="coinflip('heads')">
+
+Heads
+
+</button>
+
+<button
+class="primary"
+onclick="coinflip('tails')">
+
+Tails
+
+</button>
+
+</div>
+
+<div
+id="coinMessage"
+class="message">
+</div>
+
+</div>
+
+
+<!-- WORK -->
+
+<div class="action">
+
+<h3>
+💼 Work
+</h3>
+
+<p>
+Work a job and earn some cash.
+</p>
+
+<button
+class="primary green"
+onclick="work()">
+
+💼 Work
+
+</button>
+
+<div
+id="workMessage"
+class="message">
+</div>
+
+</div>
+
+
+<!-- CRIME -->
+
+<div class="action">
+
+<h3>
+🎭 Crime
+</h3>
+
+<p>
+Try your luck with a fictional in-game crime.
+</p>
+
+<button
+class="primary red"
+onclick="crime()">
+
+🎭 Crime
+
+</button>
+
+<div
+id="crimeMessage"
+class="message">
+</div>
+
+</div>
+
+
+<!-- DAILY -->
+
+<div class="action">
+
+<h3>
+🎁 Daily Reward
+</h3>
+
+<p>
+Claim your daily in-game reward.
+</p>
+
+<button
+class="primary"
+onclick="daily()">
+
+🎁 Claim Daily
+
+</button>
+
+<div
+id="dailyMessage"
+class="message">
+</div>
+
+</div>
+
+
+<!-- DEPOSIT -->
+
+<div class="action">
+
+<h3>
+🏦 Deposit
+
+</h3>
+
+<p>
+Move cash into your bank.
+</p>
+
+<input
+id="depositAmount"
+type="number"
+min="1"
+placeholder="Amount">
+
+<button
+class="primary"
+onclick="deposit()">
+
+🏦 Deposit
+
+</button>
+
+<div
+id="depositMessage"
+class="message">
+</div>
+
+</div>
+
+
+<!-- WITHDRAW -->
+
+<div class="action">
+
+<h3>
+💳 Withdraw
+</h3>
+
+<p>
+Move bank money back to cash.
+</p>
+
+<input
+id="withdrawAmount"
+type="number"
+min="1"
+placeholder="Amount">
+
+<button
+class="primary"
+onclick="withdraw()">
+
+💳 Withdraw
+
+</button>
+
+<div
+id="withdrawMessage"
+class="message">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     LEADERBOARD
+========================= -->
+
+<div class="card">
+
+<div class="leader-header">
+
+<h2>
+🏆 Real Leaderboard
+</h2>
+
+<button
+class="refresh"
+onclick="loadLeaderboard()">
+
+🔄 Refresh
+
+</button>
+
+</div>
+
+
+<div
+id="leaderboard"
+class="loading">
+
+Loading leaderboard...
+
+</div>
+
+
+<div
+id="economySummary"
+class="economy-summary hidden">
+
+<div class="summary">
+
+<div class="muted">
+👥 Players
+</div>
+
+<strong id="playerCount">
+0
+</strong>
+
+</div>
+
+
+<div class="summary">
+
+<div class="muted">
+💵 Total Cash
+</div>
+
+<strong id="totalCash">
+$0
+</strong>
+
+</div>
+
+
+<div class="summary">
+
+<div class="muted">
+🏦 Total Bank
+</div>
+
+<strong id="totalBank">
+$0
+</strong>
+
+</div>
+
+
+<div class="summary">
+
+<div class="muted">
+💰 Total Economy
+</div>
+
+<strong id="totalEconomy">
+$0
+</strong>
+
+</div>
+
+</div>
+
+</div>
+
+
+</section>
+
+
+<div class="footer">
+
+Discord Economy • Game currency only
+
+</div>
+
+</main>
+
+
+<script>
+
+/* =====================================
+   BASIC HELPERS
+===================================== */
+
+function money(number){
+
+return "$" +
+Number(number || 0)
+.toLocaleString("en-US");
+
+}
+
+
+function escapeHTML(text){
+
+return String(text)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+function showMessage(id,text,type){
+
+const element =
+document.getElementById(id);
+
+element.innerHTML =
+`<span class="${type}">
+${escapeHTML(text)}
+</span>`;
+
+}
+
+
+/* =====================================
+   DISCORD LOGIN
+===================================== */
+
+function loginWithDiscord(){
+
+window.location.href =
+"/auth/discord";
+
+}
+
+
+/* =====================================
+   API
+===================================== */
+
+async function api(
+url,
+options={}
+){
+
+const response =
+await fetch(
+url,
+{
+...options,
+
+headers:{
+"Content-Type":
+"application/json",
+
+...(options.headers || {})
+}
+
+}
+);
+
+const data =
+await response
+.json()
+.catch(
+()=>({})
+);
+
+if(!response.ok){
+
+throw new Error(
+data.error ||
+"Something went wrong."
+);
+
+}
+
+return data;
+
+}
+
+
+/* =====================================
+   LOAD ACCOUNT
+===================================== */
+
+async function loadAccount(){
+
+try{
+
+const data =
+await api("/api/me");
+
+
+document
+.getElementById("loginScreen")
+.classList
+.add("hidden");
+
+
+document
+.getElementById("dashboard")
+.classList
+.remove("hidden");
+
+
+document
+.getElementById("username")
+.textContent =
+data.user.username;
+
+
+document
+.getElementById("avatar")
+.src =
+data.user.avatar;
+
+
+updateBalance(
+data.economy
+);
+
+
+await loadLeaderboard();
+
+}
+
+catch{
+
+document
+.getElementById("loginScreen")
+.classList
+.remove("hidden");
+
+
+document
+.getElementById("dashboard")
+.classList
+.add("hidden");
+
+}
+
+}
+
+
+/* =====================================
+   BALANCE
+===================================== */
+
+function updateBalance(economy){
+
+document
+.getElementById("cash")
+.textContent =
+money(economy.cash);
+
+
+document
+.getElementById("bank")
+.textContent =
+money(economy.bank);
+
+
+document
+.getElementById("total")
+.textContent =
+money(economy.total);
+
+}
+
+
+/* =====================================
+   LEADERBOARD
+===================================== */
+
+async function loadLeaderboard(){
+
+const leaderboard =
+document.getElementById(
+"leaderboard"
+);
+
+leaderboard.innerHTML =
+'<div class="loading">Loading...</div>';
+
+try{
+
+const data =
+await api(
+"/api/leaderboard"
+);
+
+
+document
+.getElementById("playerCount")
+.textContent =
+Number(
+data.players || 0
+).toLocaleString();
+
+
+document
+.getElementById("totalCash")
+.textContent =
+money(data.totalCash);
+
+
+document
+.getElementById("totalBank")
+.textContent =
+money(data.totalBank);
+
+
+document
+.getElementById("totalEconomy")
+.textContent =
+money(
+Number(data.totalCash || 0) +
+Number(data.totalBank || 0)
+);
+
+
+document
+.getElementById("economySummary")
+.classList
+.remove("hidden");
+
+
+if(
+!data.leaderboard ||
+data.leaderboard.length === 0
+){
+
+leaderboard.innerHTML =
+'<div class="loading">No players yet.</div>';
+
+return;
+
+}
+
+
+const medals = [
+"🥇",
+"🥈",
+"🥉"
+];
+
+
+leaderboard.innerHTML =
+data.leaderboard
+.map(
+(player,index)=>`
+
+<div class="leader-row">
+
+<div class="rank">
+
+${medals[index] || index + 1}
+
+</div>
+
+
+<div class="player">
+
+<img
+class="player-avatar"
+src="${escapeHTML(player.avatar || "")}"
+alt="">
+
+
+<div>
+
+<div class="player-name">
+
+${escapeHTML(
+player.name || "Unknown"
+)}
+
+</div>
+
+<div class="player-small">
+
+Cash ${money(player.cash)}
+•
+Bank ${money(player.bank)}
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="total">
+
+${money(player.total)}
+
+</div>
+
+</div>
+
+`
+)
+.join("");
+
+}
+
+catch(error){
+
+leaderboard.innerHTML =
+`<div class="error">
+${escapeHTML(error.message)}
+</div>`;
+
+}
+
+}
+
+
+/* =====================================
+   COINFLIP
+===================================== */
+
+async function coinflip(side){
+
+const amount =
+Number(
+document
+.getElementById("coinAmount")
+.value
+);
+
+
+if(
+!Number.isInteger(amount) ||
+amount <= 0
+){
+
+showMessage(
+"coinMessage",
+"Enter a valid bet.",
+"error"
+);
+
+return;
+
+}
+
+
+try{
+
+const result =
+await api(
+"/api/coinflip",
+{
+method:"POST",
+
+body:JSON.stringify({
+amount,
+side
+})
+
+}
+);
+
+
+updateBalance(result);
+
+
+if(result.won){
+
+showMessage(
+"coinMessage",
+`🟢 You won ${money(
+result.change
+)}! Result: ${result.result}`,
+"success"
+);
+
+}else{
+
+showMessage(
+"coinMessage",
+`🔴 You lost ${money(
+Math.abs(result.change)
+)}. Result: ${result.result}`,
+"error"
+);
+
+}
+
+
+await loadLeaderboard();
+
+}
+
+catch(error){
+
+showMessage(
+"coinMessage",
+error.message,
+"error"
+);
+
+}
+
+}
+
+
+/* =====================================
+   WORK
+===================================== */
+
+async function work(){
+
+try{
+
+const result =
+await api(
+"/api/work",
+{
+method:"POST",
+body:"{}"
+}
+);
+
+
+updateBalance(result);
+
+
+showMessage(
+"workMessage",
+`💼 You worked as ${result.job} and earned ${money(result.reward)}!`,
+"success"
+);
+
+
+await loadLeaderboard();
+
+}
+
+catch(error){
+
+showMessage(
+"workMessage",
+error.message,
+"error"
+);
+
+}
+
+}
+
+
+/* =====================================
+   CRIME
+===================================== */
+
+async function crime(){
+
+try{
+
+const result =
+await api(
+"/api/crime",
+{
+method:"POST",
+body:"{}"
+}
+);
+
+
+updateBalance(result);
+
+
+if(result.success){
+
+showMessage(
+"crimeMessage",
+`🎭 Success! You earned ${money(result.reward)}.`,
+"success"
+);
+
+}else{
+
+showMessage(
+"crimeMessage",
+`🚨 Failed! You lost ${money(result.loss)}.`,
+"error"
+);
+
+}
+
+
+await loadLeaderboard();
+
+}
+
+catch(error){
+
+showMessage(
+"crimeMessage",
+error.message,
+"error"
+);
+
+}
+
+}
+
+
+/* =====================================
+   DAILY
+===================================== */
+
+async function daily(){
+
+try{
+
+const result =
+await api(
+"/api/daily",
+{
+method:"POST",
+body:"{}"
+}
+);
+
+
+updateBalance(result);
+
+
+showMessage(
+"dailyMessage",
+`🎁 You received ${money(result.reward)}!`,
+"success"
+);
+
+
+await loadLeaderboard();
+
+}
+
+catch(error){
+
+showMessage(
+"dailyMessage",
+error.message,
+"error"
+);
+
+}
+
+}
+
+
+/* =====================================
+   DEPOSIT
+===================================== */
+
+async function deposit(){
+
+const amount =
+Number(
+document
+.getElementById("depositAmount")
+.value
+);
+
+
+try{
+
+const result =
+await api(
+"/api/deposit",
+{
+method:"POST",
+
+body:JSON.stringify({
+amount
+})
+
+}
+);
+
+
+updateBalance(result);
+
+
+showMessage(
+"depositMessage",
+`🏦 Deposited ${money(amount)}.`,
+"success"
+);
+
+
+document
+.getElementById("depositAmount")
+.value = "";
+
+
+await loadLeaderboard();
+
+}
+
+catch(error){
+
+showMessage(
+"depositMessage",
+error.message,
+"error"
+);
+
+}
+
+}
+
+
+/* =====================================
+   WITHDRAW
+===================================== */
+
+async function withdraw(){
+
+const amount =
+Number(
+document
+.getElementById("withdrawAmount")
+.value
+);
+
+
+try{
+
+const result =
+await api(
+"/api/withdraw",
+{
+method:"POST",
+
+body:JSON.stringify({
+amount
+})
+
+}
+);
+
+
+updateBalance(result);
+
+
+showMessage(
+"withdrawMessage",
+`💳 Withdrew ${money(amount)}.`,
+"success"
+);
+
+
+document
+.getElementById("withdrawAmount")
+.value = "";
+
+
+await loadLeaderboard();
+
+}
+
+catch(error){
+
+showMessage(
+"withdrawMessage",
+error.message,
+"error"
+);
+
+}
+
+}
+
+
+/* =====================================
+   LOGOUT
+===================================== */
+
+async function logout(){
+
+try{
+
+await fetch(
+"/auth/logout",
+{
+method:"POST"
+}
+);
+
+}
+
+finally{
+
+location.reload();
+
+}
+
+}
+
+
+/* =====================================
+   START
+===================================== */
+
+loadAccount();
+
+
+/*
+   Automatically refresh real data
+   every 30 seconds.
+*/
+
+setInterval(
+loadAccount,
+30000
+);
+
+</script>
+
+</body>
+</html>
