@@ -41,7 +41,8 @@ textarea{resize:vertical;min-height:80px}
 .stat{min-height:120px}.icon{font-size:25px}.label{color:#9eabc1;font-size:13px;margin-top:8px}.value{font-size:27px;font-weight:800;margin-top:6px}
 .actions{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.action{background:#0b1220;border:1px solid #31415f;border-radius:13px;padding:16px}
 .action h3{margin:0 0 7px}.action p{color:#8e9ab0;font-size:13px}
-.leader-top{display:flex;justify-content:space-between;align-items:center}.leader-top h2{margin:0}
+.leader-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.leader-top h2{margin:0}.leader-top .small{min-width:110px}
+#leaderboard{width:100%}
 .row{display:grid;grid-template-columns:45px 1fr 150px;align-items:center;gap:10px;padding:12px 3px;border-top:1px solid #293750}
 .player{display:flex;align-items:center;gap:10px}.player-name{font-weight:bold}.details{color:#7e8ba1;font-size:12px;margin-top:3px}.total{text-align:right;font-weight:bold}
 .modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:15px;background:#000b}
@@ -60,132 +61,50 @@ textarea{resize:vertical;min-height:80px}
 @media(max-width:600px){.staff-grid{grid-template-columns:1fr}}
 </style>
 
-<style id="compact-owner-profile-fix">
-#ownerControlBox{margin-top:8px;padding:10px;border:1px solid rgba(100,140,255,.3);border-radius:12px}
-#ownerControlBox.hidden{display:none!important}
-#ownerActionGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px}
-#ownerActionGrid button{padding:7px 8px!important;font-size:12px!important;min-height:32px}
-#ownerInlineForm{margin-top:8px;padding:9px;border-radius:10px;border:1px solid rgba(100,140,255,.25)}
-#ownerInlineForm.hidden{display:none!important}
-.profile-money-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:8px}
-.profile-money-stat{padding:8px;border-radius:8px;background:rgba(120,120,120,.1)}
-@media(max-width:600px){#ownerActionGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+
+
+
+
+
+
+
+
+
+
+<style id="single-panel-clean-css">
+#singleRolePanel{
+  display:block!important;width:100%!important;clear:both!important;
+  margin:28px 0 0!important;padding:16px!important;
+  border:1px solid #39537d!important;border-radius:16px!important;
+  background:#0e1729!important;box-sizing:border-box!important
+}
+#singleRolePanel .srp-title{font-size:20px;font-weight:800;margin-bottom:10px}
+#singleRolePanel .srp-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+#singleRolePanel .srp-actions button{min-height:44px!important}
+#singleRolePanel .srp-form{
+  margin-top:10px;padding:11px;border:1px solid #33486e;border-radius:11px
+}
+#singleRolePanel .srp-form.hidden{display:none!important}
+#singleRolePanel input,#singleRolePanel textarea,#singleRolePanel select{
+  width:100%;box-sizing:border-box;margin:5px 0;padding:10px;
+  border:1px solid #405273;border-radius:8px;background:#0b1220;color:#fff
+}
+#singleRolePanel .srp-row{display:flex;gap:6px;margin-top:7px}
+#singleRolePanel .srp-row button{flex:1;min-height:40px}
+@media(max-width:650px){#singleRolePanel .srp-actions{grid-template-columns:1fr 1fr}}
 </style>
-
-<style id="embedded-role-fix">
-#ownerControlBox{max-width:100%;margin-top:6px;padding:8px;border-radius:12px}
-#ownerActionGrid{gap:1px!important}
-#ownerActionGrid button{padding:6px 8px!important;font-size:11px!important;min-height:30px!important}
-#ownerInlineForm{margin-top:6px;padding:8px;border-radius:10px}
-.embedded-role-form{margin-top:6px;padding:8px;border-radius:10px;border:1px solid rgba(100,140,255,.28)}
-.embedded-role-form.hidden{display:none!important}
-.role-panel-compact{margin-top:6px!important;padding:8px!important}
-.role-panel-compact .role-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px}
-.role-panel-compact .role-buttons button{padding:6px 7px!important;font-size:11px!important}
-@media(max-width:600px){.role-panel-compact .role-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}}
-</style>
-
-<style id="role-actions-final-fix">
-.role-panel-compact .role-title{font-size:14px;font-weight:700;margin-bottom:6px}
-.role-panel-compact .role-timer{font-size:11px;opacity:.75;margin-bottom:6px}
-.role-panel-compact .role-buttons{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px!important}
-.role-panel-compact .role-buttons button{font-size:11px!important;padding:6px!important;min-height:30px!important}
-.role-inline-form{margin-top:6px;padding:8px;border-radius:10px;border:1px solid rgba(100,140,255,.25)}
-.role-inline-form.hidden{display:none!important}
-@media(max-width:600px){.role-panel-compact .role-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}}
-</style>
-
-<style id="remove-legacy-owner-panels">
-/* Legacy duplicate Owner/Staff panels are disabled. */
-#ownerStaffManagement,#ownerStaffPanel,#staffManagementPanel,
-#zeenkoOwnerPanel,#ownerPanel,#legacyOwnerPanel,#legacyStaffPanel,
-.zeenko-owner-panel,.owner-staff-management,.owner-staff-panel{
-  display:none!important;
-}
-</style>
-
-
-
-
-
-
-
-<style id="single-large-box-css">
-#singleLargeOwnerBox{
-  width:100%;margin-top:12px;padding:18px;border-radius:18px;
-  border:1px solid rgba(100,140,255,.35);
-  background:rgba(15,25,48,.96)
-}
-#singleLargeOwnerBox .box-title{
-  font-size:22px;font-weight:800;margin-bottom:14px
-}
-#singleLargeOwnerBox .action-grid{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px
-}
-#singleLargeOwnerBox .action-grid button{
-  min-height:46px;padding:10px 8px!important;font-size:13px!important
-}
-#singleLargeOwnerBox .action-content{
-  margin-top:10px;padding:12px;border-radius:13px;
-  border:1px solid rgba(100,140,255,.3)
-}
-#singleLargeOwnerBox .action-content.hidden{display:none!important}
-#singleLargeOwnerBox input,
-#singleLargeOwnerBox textarea,
-#singleLargeOwnerBox select{
-  width:100%;box-sizing:border-box;margin:6px 0;padding:11px;
-  border-radius:9px;font-size:14px
-}
-#singleLargeOwnerBox .form-buttons{
-  display:flex;gap:6px;margin-top:8px
-}
-#singleLargeOwnerBox .form-buttons button{
-  flex:1;min-height:42px!important
-}
-#singleLargeOwnerBox .back-btn{
-  margin-top:8px;width:100%;min-height:40px!important
-}
-@media(max-width:600px){
-  #singleLargeOwnerBox{padding:14px}
-  #singleLargeOwnerBox .action-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
-  #singleLargeOwnerBox .action-grid button{font-size:12px!important}
-}
-</style>
-
-<style id="FINAL_SINGLE_PANEL_CSS">
-/* Hide every legacy/duplicate management panel. */
-#managementLauncher,#managementEmbed,#ownerControlBox,#ownerStaffManagement,#ownerStaffPanel,
-#staffManagementPanel,#zeenkoOwnerPanel,#ownerPanel,#legacyOwnerPanel,#legacyStaffPanel,
-#moderatorPanel,#staffMemberPanel,.role-panel-compact,.zeenko-owner-panel,
-.owner-staff-management,.owner-staff-panel{display:none!important}
-
-/* The one large panel. */
-#FINAL_SINGLE_PANEL{
- margin-top:14px;padding:18px;border:1px solid #405273;border-radius:17px;
- background:#10182bf5;box-shadow:0 12px 35px #0005
-}
-#FINAL_SINGLE_PANEL .final-title{font-size:22px;font-weight:800;margin-bottom:12px}
-#FINAL_SINGLE_PANEL .final-actions{
- display:grid;grid-template-columns:repeat(3,1fr);gap:8px
-}
-#FINAL_SINGLE_PANEL .final-actions button{min-height:46px;font-size:13px!important}
-#FINAL_SINGLE_PANEL .final-form{
- margin-top:10px;padding:12px;border:1px solid #405273;border-radius:13px
-}
-#FINAL_SINGLE_PANEL .final-form.hidden{display:none!important}
-#FINAL_SINGLE_PANEL .final-form input,
-#FINAL_SINGLE_PANEL .final-form select,
-#FINAL_SINGLE_PANEL .final-form textarea{
- width:100%;margin:6px 0;padding:11px;border-radius:9px
-}
-#FINAL_SINGLE_PANEL .final-form-buttons{display:flex;gap:8px;margin-top:8px}
-#FINAL_SINGLE_PANEL .final-form-buttons button{flex:1;min-height:42px}
-@media(max-width:600px){
- #FINAL_SINGLE_PANEL{padding:14px}
- #FINAL_SINGLE_PANEL .final-actions{grid-template-columns:repeat(2,1fr);gap:6px}
-}
-</style>
-</head>
+<style>
+/* REMOVE LEGACY MANAGEMENT PANELS */
+.legacy-owner-management,
+.owner-staff-management,
+.staff-management,
+.owner-management,
+#ownerStaffManagement,
+#staffManagement,
+#ownerManagement{display:none!important}
+</style></head>
 <body>
 <header>
 <h1>💰 InjuriesX2</h1><p>Economy Game</p>
@@ -269,8 +188,8 @@ textarea{resize:vertical;min-height:80px}
 <div style="margin-top:14px;padding-top:12px;border-top:1px solid #293750">
 <button id="prizeBtn" class="btn" style="width:100%">🏆 Prize</button>
 <div id="prizeBox" class="hidden reward-box">
-<div class="muted">Risk any amount of coins</div>
-<label>How many coins do you want to risk?</label><input id="riskAmount" type="number" min="1" placeholder="Amount to risk">
+<div class="muted">Minimum risk: 75,000 coins</div>
+<label>How many coins do you want to risk?</label><input id="riskAmount" type="number" min="75000" placeholder="75000">
 <button id="choosePrizeBtn" class="btn" style="width:100%;margin-top:8px">Continue</button>
 <div id="prizeContent" style="margin-top:10px"></div>
 </div></div>
@@ -285,7 +204,19 @@ textarea{resize:vertical;min-height:80px}
 <div id="leaderboard"></div>
 </section>
 
->
+
+<div id="staffMsg" class="message"></div>
+
+<div id="ownerTools" class="hidden" style="margin-top:16px;padding-top:15px;border-top:1px solid #293750">
+<h3>👑 Owner Staff Management</h3>
+<label>Staff username</label><input id="staffAddName" placeholder="Username">
+<div class="staff-grid">
+<button id="addModeratorBtn" class="btn">🛡️ Add Moderator</button>
+<button id="addStaffBtn" class="btn">⭐ Add Staff</button>
+</div>
+<div class="details" style="margin-top:8px">Enter a player's username above, then choose a role.</div>
+</div>
+</section>
 </section>
 </main>
 
@@ -310,7 +241,8 @@ const USERS_KEY="injuriesx2_users_v3";
 const SESSION_KEY="injuriesx2_session_v3";
 const OWNER="Zeenko";
 const PASSWORD_COOLDOWN=12*60*60*1000;
-const USERNAME_COOLDOWN=3*24*60*60*1000;
+const AVATAR_COOLDOWN=3*24*60*60*1000;
+const USERNAME_COOLDOWN=7*24*60*60*1000;
 
 let users={},currentUser=null,selectedPFP="",viewedPlayer=null,numberBusy=false;
 
@@ -337,17 +269,6 @@ function saveSession(){
 }
 function getSession(){
  try{return localStorage.getItem(SESSION_KEY)||""}catch(e){return ""}
-}
-function rememberLogin(name,pass){
- try{localStorage.setItem("injuriesx2_last_username",String(name||""));localStorage.setItem("injuriesx2_last_password",String(pass||""))}catch(e){}
-}
-function restoreLogin(){
- try{
-  const n=localStorage.getItem("injuriesx2_last_username")||"";
-  const p=localStorage.getItem("injuriesx2_last_password")||"";
-  const a=document.getElementById("loginUsername"),b=document.getElementById("loginPassword");
-  if(a&&n)a.value=n;if(b&&p)b.value=p;
- }catch(e){}
 }
 function norm(v){return String(v||"").trim()}
 function key(v){return norm(v).toLowerCase()}
@@ -391,25 +312,44 @@ function createAccount(){
  if(users[k])return msg("authMsg","Name already taken.","error");
  users[k]={username:name,password:pass,bio:"",country:"",avatar:"",cash:1000,bank:0,lastWork:0,lastCrime:0,lastDaily:0,lastUsernameChange:0,lastPasswordChange:0,banned:false,suspendedUntil:0,role:"player",likes:0,dislikes:0};
  if(!saveUsers()){delete users[k];return msg("authMsg","Could not save account.","error")}
- currentUser=k;
-rememberLogin(name,pass);
+ saveUsers();
+currentUser=k;
 saveSession();
 showLoading(700,openGame);
 }
 
 function login(){
- loadUsers();
- const name=norm(document.getElementById("loginUsername").value),pass=document.getElementById("loginPassword").value,k=key(name),x=users[k];
- if(!x)return msg("authMsg","Account not found.","error");
- if(x.banned)return msg("authMsg","This account is banned.","error");
- if(Number(x.suspendedUntil||0)>Date.now())return msg("authMsg","This account is suspended.","error");
- if(x.password!==pass)return msg("authMsg","Incorrect password.","error");
- const stored=users[k];
-if(!stored)return msg("authMsg","Account data could not be loaded.","error");
-currentUser=k;
-rememberLogin(name,pass);
-saveSession();
-showLoading(700,openGame);
+  loadUsers();
+
+  const name=norm(document.getElementById("loginUsername").value);
+  const pass=String(document.getElementById("loginPassword").value||"");
+  const k=key(name);
+  const x=users[k];
+
+  if(!name||!pass)return msg("authMsg","Enter your username and password.","error");
+  if(!x)return msg("authMsg","Account not found.","error");
+
+  normalizeUserData(x);
+
+  if(String(x.password??"")!==pass)
+    return msg("authMsg","Incorrect password.","error");
+
+  if(x.banned)
+    return msg("authMsg","This account is banned.","error");
+
+  if(Number(x.suspendedUntil||0)>Date.now())
+    return msg("authMsg","This account is suspended.","error");
+
+  currentUser=k;
+  users[k]=x;
+
+  if(!saveUsers())
+    return msg("authMsg","Could not save login session.","error");
+
+  saveSession();
+
+  // Open directly; don't use the old loading animation that could interrupt login.
+  openGame();
 }
 
 function changePassword(){
@@ -468,12 +408,14 @@ document.getElementById("registerTab").onclick=showRegister;
 document.getElementById("forgotBtn").onclick=showForgot;
 document.getElementById("forgotCloseBtn").onclick=showLogin;
 document.getElementById("loginBtn").onclick=login;
+  document.getElementById("loginUsername").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
+  document.getElementById("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
 document.getElementById("registerBtn").onclick=createAccount;
 document.getElementById("changePasswordBtn").onclick=changePassword;
 document.getElementById("logoutBtn").onclick=logout;
 
 document.getElementById("workBtn").onclick=function(){
- const x=u();if(Date.now()-(x.lastWork||0)<45000)return msg("workMsg","Wait before working again.","error");
+ const x=u();if(Date.now()-(x.lastWork||0)<10000)return msg("workMsg","Wait before working again.","error");
  const r=Math.floor(Math.random()*1001)+500;x.cash+=r;x.lastWork=Date.now();saveUsers();update();msg("workMsg","💼 You earned "+money(r)+"!","success");
 };
 document.getElementById("crimeBtn").onclick=function(){
@@ -488,7 +430,10 @@ document.getElementById("dailyBtn").onclick=function(){
  const r=Math.floor(Math.random()*1001)+1000;x.cash+=r;x.lastDaily=Date.now();saveUsers();update();msg("dailyMsg","🎁 +"+money(r),"success");
 };
 document.querySelectorAll(".coinBtn").forEach(b=>b.onclick=function(){
- const x=u(),bet=Math.floor(Number(document.getElementById("coinBet").value)),result=Math.random()<.5?"heads":"tails";
+ const x=u();
+  if(Date.now()-(x.lastCoinflip||0)<5000)return msg("coinMsg","Wait 5 seconds.","error");
+  x.lastCoinflip=Date.now();
+  const bet=Math.floor(Number(document.getElementById("coinBet").value)),result=Math.random()<.5?"heads":"tails";
  if(!Number.isFinite(bet)||bet<=0)return msg("coinMsg","Enter a valid bet.","error");
  if(bet>x.cash)return msg("coinMsg","Not enough cash.","error");
  if(result===this.dataset.side){x.cash+=bet;msg("coinMsg","🟢 Won "+money(bet)+"!","success")}
@@ -510,72 +455,12 @@ document.getElementById("withdrawBtn").onclick=function(){
 };
 
 function playNumber(dir){
-  if(numberBusy)return;
-  const x=u();
-  if(!x)return;
-
-  const input=document.getElementById("upDownBet");
-  const d=document.getElementById("number");
-  const message=document.getElementById("upDownMsg");
-  const up=document.getElementById("upBtn");
-  const down=document.getElementById("downBtn");
-  const bet=Math.floor(Number(input && input.value));
-
-  if(!Number.isFinite(bet)||bet<1){
-    return msg("upDownMsg","Enter a valid bet.","error");
-  }
-  if(bet>Number(x.cash||0)){
-    return msg("upDownMsg","Not enough cash.","error");
-  }
-
-  numberBusy=true;
-  if(up)up.disabled=true;
-  if(down)down.disabled=true;
-
-  const old=Math.floor(Math.random()*100)+1;
-  if(d)d.textContent=old;
-
-  let ticks=0;
-  const timer=setInterval(()=>{
-    ticks++;
-
-    // Visible changing-number animation.
-    const shown=Math.floor(Math.random()*100)+1;
-    if(d)d.textContent=shown;
-
-    if(ticks>=20){
-      clearInterval(timer);
-
-      let fin=Math.floor(Math.random()*100)+1;
-      // Force a possible valid direction at the edges.
-      if(fin===old){
-        fin=dir==="up"
-          ? (old<100?old+1:old-1)
-          : (old>1?old-1:old+1);
-      }
-
-      if(d)d.textContent=fin;
-
-      if(dir==="up" && fin>old){
-        x.cash+=bet;
-        msg("upDownMsg",old+" → "+fin+" • Won "+money(bet),"success");
-      }else if(dir==="down" && fin<old){
-        x.cash+=bet;
-        msg("upDownMsg",old+" → "+fin+" • Won "+money(bet),"success");
-      }else{
-        x.cash=Math.max(0,Number(x.cash||0)-bet);
-        msg("upDownMsg",old+" → "+fin+" • Lost "+money(bet),"error");
-      }
-
-      saveUsers();
-      update();
-      numberBusy=false;
-      if(up)up.disabled=false;
-      if(down)down.disabled=false;
-    }
-  },100);
+ if(numberBusy)return;const x=u(),bet=Math.floor(Number(document.getElementById("upDownBet").value));
+ if(!Number.isFinite(bet)||bet<=0)return msg("upDownMsg","Enter a valid bet.","error");
+ if(bet>x.cash)return msg("upDownMsg","Not enough cash.","error");
+ numberBusy=true;const d=document.getElementById("number"),old=Math.floor(Math.random()*100)+1;let ticks=0;
+ const timer=setInterval(()=>{d.textContent=Math.floor(Math.random()*100)+1;ticks++;if(ticks>=20){clearInterval(timer);let fin=Math.floor(Math.random()*100)+1;if(fin===old)fin=dir==="up"?Math.min(100,old+1):Math.max(1,old-1);d.textContent=fin;if((dir==="up"&&fin>old)||(dir==="down"&&fin<old)){x.cash+=bet;msg("upDownMsg",old+" → "+fin+" • Won "+money(bet),"success")}else{x.cash-=bet;msg("upDownMsg",old+" → "+fin+" • Lost "+money(bet),"error")}saveUsers();update();numberBusy=false}},100)
 }
-
 document.getElementById("upBtn").onclick=()=>playNumber("up");
 document.getElementById("downBtn").onclick=()=>playNumber("down");
 
@@ -588,378 +473,219 @@ document.getElementById("challengeBtn").onclick=function(){
 
 /* PRIZE: demo result only; owner manually supplies the real prize */
 document.getElementById("prizeBtn").onclick=()=>{
-  document.getElementById("prizeBox").classList.toggle("hidden");
+  const b=document.getElementById("prizeBox");
+  if(b)b.classList.toggle("hidden");
 };
+
+function rewardBox(){
+  return document.getElementById("prizeContent");
+}
+
+function rewardRisk(){
+  const el=document.getElementById("riskAmount");
+  return Math.floor(Number(el&&el.value||0));
+}
+
+function renderRewardChoices(){
+  const box=rewardBox();
+  if(!box)return;
+  box.innerHTML=
+    '<div class="prizeResult">'+
+    '<h3>🎁 CHOOSE REWARD</h3>'+
+    '<button class="btn" id="robuxChoice">💎 ROBUX</button>'+
+    '<button class="btn" id="accountChoice">👤 ROBLOX ACCOUNT</button>'+
+    '<button class="small" id="rewardClose">CLOSE</button>'+
+    '</div>';
+  document.getElementById("robuxChoice").onclick=()=>startReward("robux");
+  document.getElementById("accountChoice").onclick=()=>startReward("account");
+  document.getElementById("rewardClose").onclick=()=>{box.innerHTML="";};
+}
 
 document.getElementById("choosePrizeBtn").onclick=function(){
-  const x=u();
-  const risk=Math.floor(Number(document.getElementById("riskAmount").value));
-  const wealth=Number(x.cash||0)+Number(x.bank||0);
+  const x=u(), box=rewardBox(), risk=rewardRisk();
+  if(!x||!box)return;
 
-  if(!Number.isFinite(risk)||risk<1)
-    return msg("prizeContent","Enter a risk amount from 1 coin and up.","error");
-  if(risk>wealth)
-    return msg("prizeContent","You don't have enough coins.","error");
-
-  showLoading(900,()=>{
-    document.getElementById("prizeContent").innerHTML=
-      '<div class="choice">'+
-      '<button id="robuxChoice" class="btn">💎 ROBUX</button>'+
-      '<button id="accountChoice" class="btn">👤 ROBLOX ACCOUNT</button>'+
-      '</div>';
-
-    document.getElementById("robuxChoice").onclick=()=>{
-      showLoading(700,()=>resolvePrize("robux",risk));
-    };
-    document.getElementById("accountChoice").onclick=()=>{
-      showLoading(700,()=>resolvePrize("account",risk));
-    };
-  });
-};
-
-function resolvePrize(type,risk){
-  const x=u();
-  const wealth=Number(x.cash||0)+Number(x.bank||0);
-  if(risk<1||risk>wealth){
-    msg("prizeContent","You don't have enough coins.","error");
+  const balance=Number(x.cash||0);
+  if(!Number.isFinite(risk)||risk<75000){
+    box.innerHTML='<div class="prizeResult"><b>Minimum risk is 75,000 coins.</b><p>Your balance is: '+balance.toLocaleString()+' coins</p></div>';
+    return;
+  }
+  if(risk>balance){
+    box.innerHTML='<div class="prizeResult"><b>Not enough coins.</b><p>Your balance is: '+balance.toLocaleString()+' coins</p></div>';
     return;
   }
 
-  /* Deduct ONLY the amount the player chose to risk. */
-  let fromCash=Math.min(Number(x.cash||0),risk);
-  x.cash=Number(x.cash||0)-fromCash;
-  const remaining=risk-fromCash;
-  x.bank=Math.max(0,Number(x.bank||0)-remaining);
+  // Confirmation stays in the SAME box.
+  box.innerHTML=
+    '<div class="prizeResult">'+
+    '<h3>⚠️ ARE YOU SURE?</h3>'+
+    '<p>You are risking <b>'+risk.toLocaleString()+' coins</b>.</p>'+
+    '<p>Your balance: <b>'+balance.toLocaleString()+' coins</b></p>'+
+    '<button class="btn" id="confirmReward">YES, CONTINUE</button>'+
+    '<button class="small" id="cancelReward">CANCEL</button>'+
+    '</div>';
+
+  document.getElementById("cancelReward").onclick=()=>{box.innerHTML="";};
+  document.getElementById("confirmReward").onclick=renderRewardChoices;
+};
+
+function startReward(type){
+  const x=u(),box=rewardBox(),risk=rewardRisk();
+  if(!x||!box)return;
+
+  const balance=Number(x.cash||0);
+  if(!Number.isFinite(risk)||risk<75000||risk>balance){
+    box.innerHTML='<div class="prizeResult"><b>Invalid risk.</b><p>Your balance is: '+balance.toLocaleString()+' coins</p></div>';
+    return;
+  }
+
+  // Deduct exactly once, after reward type is selected.
+  x.cash=balance-risk;
   saveUsers();
   update();
 
-  const box=document.getElementById("prizeContent");
-
   if(type==="robux"){
-    box.innerHTML=
-      '<div style="text-align:center">'+
-      '<div id="robuxRoll" style="font-size:30px;font-weight:900">💎 1 Robux</div>'+
-      '<p class="muted">Rolling a random prize from 1–10,000 Robux...</p>'+
-      '</div>';
-
-    let shown=0;
-    const roll=setInterval(()=>{
-      shown=Math.floor(Math.random()*10000)+1;
-      const el=document.getElementById("robuxRoll");
-      if(el)el.textContent="💎 "+shown.toLocaleString()+" Robux";
-    },100);
-
-    setTimeout(()=>{
-      clearInterval(roll);
-      const final=Math.floor(Math.random()*10000)+1;
-      const el=document.getElementById("robuxRoll");
-      if(el)el.textContent="🏆 "+final.toLocaleString()+" Robux";
-      box.innerHTML+=
-        '<button id="discordPrize" class="btn" style="width:100%;margin-top:10px">💬 Contact Owner to Claim</button>'+
-        '<p class="muted" style="text-align:center">Prize result: '+final.toLocaleString()+' Robux.</p>';
-      document.getElementById("discordPrize").onclick=()=>{
-        window.open("https://discord.gg/EGQjjR5yD5","_blank");
-      };
-    },2200);
-    return;
+    runRobuxSpin(x,risk,box);
+  }else{
+    runAccountSpin(x,risk,box);
   }
+}
 
-  /* Roblox-account prize: animated tier changes, then one final tier. */
-  const tiers=["BAD ACCOUNT","GOOD ACCOUNT","VERY GOOD ACCOUNT"];
+function runRobuxSpin(x,risk,box){
   box.innerHTML=
-    '<div style="text-align:center">'+
-    '<div id="accountRoll" style="font-size:25px;font-weight:900">BAD ACCOUNT</div>'+
-    '<p class="muted">Rolling account quality...</p>'+
+    '<div class="prizeResult">'+
+    '<h3>💎 ROBUX</h3>'+
+    '<div id="robuxSpin" style="font-size:38px;font-weight:900;text-align:center;margin:18px 0">0</div>'+
+    '<p>Risked: <b>'+risk.toLocaleString()+' coins</b></p>'+
+    '<p>Spinning...</p>'+
+    '</div>';
+
+  let last=0;
+  const timer=setInterval(()=>{
+    const el=document.getElementById("robuxSpin");
+    if(!el)return;
+    const max=risk<150000?100:10000;
+    last=Math.floor(Math.random()*(max+1));
+    el.textContent="💎 "+last.toLocaleString()+" ROBUX";
+  },80);
+
+  setTimeout(()=>{
+    clearInterval(timer);
+
+    let reward;
+    if(risk<150000){
+      reward=Math.floor(Math.random()*101);
+    }else{
+      const capped=Math.min(risk,10000000);
+      const ratio=(capped-150000)/(10000000-150000);
+      const maxReward=Math.max(1,Math.floor(1+ratio*9999));
+      reward=Math.min(10000,1+Math.floor(Math.random()*maxReward));
+    }
+
+    const balanceNow=Number(x.cash||0);
+
+    if(reward===0){
+      box.innerHTML=
+        '<div class="prizeResult">'+
+        '<h3>💎 ROBUX</h3>'+
+        '<div style="font-size:30px;font-weight:900">UNAVAILABLE</div>'+
+        '<p>Your balance is: <b>'+balanceNow.toLocaleString()+' coins</b></p>'+
+        '<button class="small" id="rewardClose">CLOSE</button>'+
+        '</div>';
+    }else{
+      showRewardResult("ROBUX",reward+" ROBUX",risk,balanceNow,box);
+    }
+  },2500);
+}
+
+function runAccountSpin(x,risk,box){
+  const tiers=["BAD ACCOUNT","GOOD ACCOUNT","VERY GOOD ACCOUNT"];
+
+  box.innerHTML=
+    '<div class="prizeResult">'+
+    '<h3>👤 ROBLOX ACCOUNT</h3>'+
+    '<div id="accountSpin" style="font-size:30px;font-weight:900;text-align:center;margin:18px 0">BAD ACCOUNT</div>'+
+    '<p>Risked: <b>'+risk.toLocaleString()+' coins</b></p>'+
+    '<p>Spinning...</p>'+
     '</div>';
 
   let i=0;
-  const roll=setInterval(()=>{
-    const el=document.getElementById("accountRoll");
-    if(el){
-      el.textContent=tiers[i%tiers.length];
-      i++;
-    }
+  const timer=setInterval(()=>{
+    const el=document.getElementById("accountSpin");
+    if(el)el.textContent=tiers[i++%tiers.length];
   },180);
 
   setTimeout(()=>{
-    clearInterval(roll);
-    const final=tiers[Math.floor(Math.random()*tiers.length)];
-    const el=document.getElementById("accountRoll");
-    if(el)el.textContent="🏆 "+final;
-    box.innerHTML+=
-      '<button id="discordAccountPrize" class="btn" style="width:100%;margin-top:10px">💬 Contact Owner to Claim</button>'+
-      '<p class="muted" style="text-align:center">Account result: '+final+'.</p>';
-    document.getElementById("discordAccountPrize").onclick=()=>{
-      window.open("https://discord.gg/EGQjjR5yD5","_blank");
-    };
-  },2200);
-}
-
-/* SEARCH + PROFILE */
-document.getElementById("search").oninput=renderSearch;
-function renderSearch(){
- const q=key(document.getElementById("search").value),box=document.getElementById("searchResults");
- if(!q){box.innerHTML="";return}
- const list=Object.values(users).filter(x=>!x.banned&&key(x.username).includes(q)).slice(0,10);
- if(!list.length){box.innerHTML='<div class="details">Player not found.</div>';return}
- box.innerHTML=list.map(x=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border-top:1px solid #293750"><div class="player"><div class="player-avatar">${x.avatar?'<img src="'+x.avatar+'">':"👤"}</div><div><div class="player-name">${esc(x.username)}</div><div class="details">${esc(x.bio||"No bio")}</div></div></div><button class="btn" data-profile="${esc(x.username)}">Go to Profile</button></div>`).join("");
- box.querySelectorAll("[data-profile]").forEach(b=>b.onclick=()=>openViewProfile(b.dataset.profile));
-}
-function openViewProfile(name){
- const x=users[key(name)];if(!x)return;viewedPlayer=key(name);
- setAvatar(document.getElementById("viewAvatar"),x.avatar);
- document.getElementById("viewName").textContent=x.username;
- document.getElementById("viewBio").textContent=x.bio||"No bio";
- document.getElementById("viewCountry").textContent=x.country||"";
- document.getElementById("likes").textContent=x.likes||0;
- document.getElementById("dislikes").textContent=x.dislikes||0;
- document.getElementById("viewProfileModal").classList.remove("hidden");
-}
-document.getElementById("closeViewProfile").onclick=()=>document.getElementById("viewProfileModal").classList.add("hidden");
-document.getElementById("likeBtn").onclick=function(){if(!viewedPlayer||viewedPlayer===currentUser)return;users[viewedPlayer].likes=(users[viewedPlayer].likes||0)+1;saveUsers();openViewProfile(viewedPlayer)}
-document.getElementById("dislikeBtn").onclick=function(){if(!viewedPlayer||viewedPlayer===currentUser)return;users[viewedPlayer].dislikes=(users[viewedPlayer].dislikes||0)+1;saveUsers();openViewProfile(viewedPlayer)}
-
-/* LEADERBOARD */
-document.getElementById("refreshBtn").onclick=function(){
- showLoading(600,()=>{
-   loadUsers();
-   const session=localStorage.getItem(SESSION_KEY);
-   if(session&&users[session])currentUser=session;
-   renderLeaderboard();renderSearch();updateStaff();update();
-   msg("challengeMsg","🔄 Leaderboard refreshed.","success");
- });
-};
-function renderLeaderboard(){
- const box=document.getElementById("leaderboard");
- const list=Object.values(users).filter(x=>!x.banned).sort((a,b)=>(Number(b.cash||0)+Number(b.bank||0))-(Number(a.cash||0)+Number(a.bank||0)));
- box.innerHTML=list.length?list.map((x,i)=>`<div class="row"><div style="text-align:center;font-weight:bold">${i<3?["🥇","🥈","🥉"][i]:"#"+(i+1)}</div><div class="player"><div class="player-avatar">${x.avatar?'<img src="'+x.avatar+'">':"👤"}</div><div><div class="player-name">${esc(x.username)} ${key(x.username)===key(OWNER)?"👑":x.role==="moderator"?"🛡️":x.role==="staff"?"⭐":""}</div><div class="details">${money(x.cash)} • ${money(x.bank)}</div></div></div><div class="total">${money(Number(x.cash||0)+Number(x.bank||0))}</div></div>`).join(""):'<div class="details">No players yet.</div>';
-}
-
-/* STAFF */
-function updateStaff(){
- const panel=document.getElementById("staffPanel"),ownerTools=document.getElementById("ownerTools");
- if(!isStaff()){panel.classList.add("hidden");return}
- panel.classList.remove("hidden");
- document.getElementById("staffTitle").textContent=isOwner()?"👑 Zeenko Owner Panel":u().role==="moderator"?"🛡️ "+u().username+" Moderator Panel":"⭐ "+u().username+" Staff Panel";
- ownerTools.classList.toggle("hidden",!isOwner());
- document.getElementById("staffCoins").max=isOwner()?"":"50000";
-}
-function targetStaff(){return users[key(document.getElementById("staffPlayer").value)]}
-document.getElementById("giveCoinsBtn").onclick=function(){
- const btn=this;
- if(!isStaff())return msg("staffMsg","You do not have staff permission.","error");
- const t=targetStaff(),a=Math.floor(Number(document.getElementById("staffCoins").value));
- if(!t)return msg("staffMsg","Player not found. Enter an existing username.","error");
- if(t.banned)return msg("staffMsg","That player is banned.","error");
- if(!Number.isFinite(a)||a<1)return msg("staffMsg","Enter a valid amount.","error");
- if(!isOwner()&&a>50000)return msg("staffMsg","Moderators can give only 1–50,000 coins.","error");
- showLoading(700,()=>{
-   t.cash=(Number(t.cash)||0)+a;
-   saveUsers();update();
-   msg("staffMsg","💰 Gave "+money(a)+" to "+t.username+".","success");
- });
-};
-
-document.getElementById("suspendBtn").onclick=function(){
- const btn=this;
- if(!isStaff())return msg("staffMsg","You do not have staff permission.","error");
- const t=targetStaff();
- if(!t)return msg("staffMsg","Player not found. Enter an existing username.","error");
- if(key(t.username)===key(OWNER))return msg("staffMsg","The owner cannot be suspended.","error");
- const days=Math.floor(Number(prompt("Suspend for how many days?","1")));
- if(!Number.isFinite(days)||days<1)return msg("staffMsg","Suspension cancelled.","error");
- showLoading(700,()=>{
-   t.suspendedUntil=Date.now()+days*86400000;
-   saveUsers();
-   renderLeaderboard();renderSearch();
-   msg("staffMsg","⏸️ "+t.username+" suspended for "+days+" day(s).","success");
- });
-};
-
-document.getElementById("banBtn").onclick=function(){
- const btn=this;
- if(!isStaff())return msg("staffMsg","You do not have staff permission.","error");
- const k=key(document.getElementById("staffPlayer").value),t=users[k];
- if(!t)return msg("staffMsg","Player not found. Enter an existing username.","error");
- if(k===key(OWNER))return msg("staffMsg","The owner cannot be banned.","error");
- if(!isOwner()&&t.role==="moderator")return msg("staffMsg","Moderators cannot ban another moderator.","error");
- showLoading(700,()=>{
-   t.banned=true;
-   saveUsers();renderLeaderboard();renderSearch();
-   msg("staffMsg","🚫 "+t.username+" has been banned.","success");
- });
-};
-
-document.getElementById("addModeratorBtn").onclick=function(){
- const btn=this;
- if(!isOwner())return msg("staffMsg","Only Zeenko can add moderators.","error");
- const name=norm(document.getElementById("staffAddName").value),t=users[key(name)];
- if(!name)return msg("staffMsg","Enter a username first.","error");
- if(!t)return msg("staffMsg","Player not found. Create/login that account first.","error");
- if(key(t.username)===key(OWNER))return msg("staffMsg","Zeenko is already the owner.","error");
- showLoading(800,()=>{
-   t.role="moderator";
-   saveUsers();update();
-   msg("staffMsg","🛡️ "+t.username+" is now a Moderator.","success");
- });
-};
-
-document.getElementById("addStaffBtn").onclick=function(){
- const btn=this;
- if(!isOwner())return msg("staffMsg","Only Zeenko can add staff.","error");
- const name=norm(document.getElementById("staffAddName").value),t=users[key(name)];
- if(!name)return msg("staffMsg","Enter a username first.","error");
- if(!t)return msg("staffMsg","Player not found. Create/login that account first.","error");
- if(key(t.username)===key(OWNER))return msg("staffMsg","Zeenko is already the owner.","error");
- showLoading(800,()=>{
-   t.role="staff";
-   saveUsers();update();
-   msg("staffMsg","⭐ "+t.username+" is now Staff.","success");
- });
-};
-
-/* PROFILE EDIT */
-document.getElementById("profileBtn").onclick=function(){
- const x=u();document.getElementById("newUsername").value=x.username;document.getElementById("bio").value=x.bio||"";document.getElementById("country").value=x.country||"";selectedPFP=x.avatar||"";
- const p=document.getElementById("preview");if(selectedPFP){p.src=selectedPFP;p.style.display="block"}else p.style.display="none";
- document.getElementById("profileModal").classList.remove("hidden");
-};
-document.getElementById("closeProfileBtn").onclick=()=>document.getElementById("profileModal").classList.add("hidden");
-document.getElementById("pfpInput").onchange=function(){
- const f=this.files[0];if(!f)return;if(!f.type.startsWith("image/"))return msg("profileMsg","Choose an image.","error");if(f.size>5*1024*1024)return msg("profileMsg","Image must be under 5MB.","error");
- const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),m=400,s=Math.min(1,m/Math.max(im.width,im.height));c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);selectedPFP=c.toDataURL("image/jpeg",.75);const p=document.getElementById("preview");p.src=selectedPFP;p.style.display="block";msg("profileMsg","PFP ready. Press Save.","success")};im.src=r.result};r.readAsDataURL(f);
-};
-document.getElementById("saveProfileBtn").onclick=function(){
- const x=u(),newName=norm(document.getElementById("newUsername").value),oldKey=currentUser,newKey=key(newName);
- if(!validName(newName))return msg("profileMsg","Invalid username.","error");
- if(newKey!==oldKey){
-  if(x.lastUsernameChange&&Date.now()-x.lastUsernameChange<USERNAME_COOLDOWN)return msg("profileMsg","Username can only be changed every 3 days.","error");
-  if(users[newKey])return msg("profileMsg","Name already taken.","error");
- }
- const savedCash=x.cash, savedBank=x.bank;
-x.username=newName;x.bio=document.getElementById("bio").value.trim().slice(0,100);x.country=document.getElementById("country").value;x.avatar=selectedPFP;
-x.cash=savedCash;x.bank=savedBank;
- if(newKey!==oldKey){delete users[oldKey];x.lastUsernameChange=Date.now();users[newKey]=x;currentUser=newKey;localStorage.setItem(SESSION_KEY,currentUser)}
- if(!saveUsers())return msg("profileMsg","Could not save profile.","error");
- document.getElementById("profileModal").classList.add("hidden");update();
-};
-
-
-function buttonLoading(btn,duration,done){
-  if(!btn || btn.disabled)return;
-  const old=btn.innerHTML;
-  btn.disabled=true;
-  let i=0;
-  const frames=[".","..","...","....","...",".."];
-  btn.innerHTML=frames[0];
-  const timer=setInterval(()=>{
-    i=(i+1)%frames.length;
-    btn.innerHTML=frames[i];
-  },160);
-  setTimeout(()=>{
     clearInterval(timer);
-    btn.disabled=false;
-    btn.innerHTML=old;
-    if(done)done();
-  },duration);
+
+    const r=Math.random();
+    const result=risk>=5000000
+      ?(r<.20?"VERY GOOD ACCOUNT":r<.70?"GOOD ACCOUNT":"BAD ACCOUNT")
+      :risk>=1000000
+        ?(r<.12?"VERY GOOD ACCOUNT":r<.60?"GOOD ACCOUNT":"BAD ACCOUNT")
+        :(r<.07?"VERY GOOD ACCOUNT":r<.52?"GOOD ACCOUNT":"BAD ACCOUNT");
+
+    showRewardResult("ROBLOX ACCOUNT",result,risk,Number(x.cash||0),box);
+  },2500);
 }
 
-function showLoading(duration=900, done){
- const overlay=document.getElementById("loadingOverlay");
- const dots=document.getElementById("loadDots");
- overlay.classList.remove("hidden");
- dots.textContent=".";
- let i=1;
- const frames=[".","..","...","....","...",".."];
- const timer=setInterval(()=>{
-   dots.textContent=frames[i%frames.length];
-   i++;
- },180);
- setTimeout(()=>{
-   clearInterval(timer);
-   overlay.classList.add("hidden");
-   dots.textContent=".";
-   if(done)done();
- },duration);
+function showRewardResult(type,result,risk,balance,box){
+  box.innerHTML=
+    '<div class="prizeResult">'+
+    '<h3>🎉 '+type+'</h3>'+
+    '<div style="font-size:30px;font-weight:900;margin:15px 0">'+result+'</div>'+
+    '<p>Risked: <b>'+risk.toLocaleString()+' coins</b></p>'+
+    '<p>Your balance is: <b>'+balance.toLocaleString()+' coins</b></p>'+
+    '<p>Go to our Discord server to claim your reward.</p>'+
+    '<button class="btn" id="claimCodes">CLAIM CODES</button>'+
+    '<button class="btn" id="joinDiscord">JOIN TO DISCORD</button>'+
+    '<button class="small" id="rewardClose">CLOSE</button>'+
+    '</div>';
+
+  document.getElementById("joinDiscord").onclick=()=>{
+    window.open("https://discord.gg/TGDvzbPfXC","_blank","noopener,noreferrer");
+  };
+
+  document.getElementById("claimCodes").onclick=()=>{
+    const code=Math.random().toString(36).slice(2,6).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase();
+    box.innerHTML=
+      '<div class="prizeResult">'+
+      '<h3>🎁 CLAIM CODE</h3>'+
+      '<p>'+type+': <b>'+result+'</b></p>'+
+      '<div style="font-size:22px;font-weight:900;letter-spacing:2px;margin:14px 0">'+code+'</div>'+
+      '<button class="btn" id="copyCode">COPY CODE</button>'+
+      '<button class="btn" id="joinDiscord">JOIN TO DISCORD</button>'+
+      '<button class="small" id="rewardClose">CLOSE</button>'+
+      '</div>';
+
+    document.getElementById("copyCode").onclick=async()=>{
+      try{
+        await navigator.clipboard.writeText(code);
+        document.getElementById("copyCode").textContent="✅ COPIED";
+      }catch(e){alert("Claim code: "+code);}
+    };
+    document.getElementById("joinDiscord").onclick=()=>window.open("https://discord.gg/TGDvzbPfXC","_blank","noopener,noreferrer");
+    document.getElementById("rewardClose").onclick=()=>{box.innerHTML="";};
+  };
+
+  document.getElementById("rewardClose").onclick=()=>{box.innerHTML="";};
 }
 
-function normalizeUserData(x){
- x.cash=Math.max(0,Math.floor(Number(x.cash)||0));
- x.bank=Math.max(0,Math.floor(Number(x.bank)||0));
- x.likes=Math.max(0,Math.floor(Number(x.likes)||0));
- x.dislikes=Math.max(0,Math.floor(Number(x.dislikes)||0));
- x.role=x.role||"player";
- x.bio=String(x.bio||"");
- x.country=String(x.country||"");
- x.avatar=String(x.avatar||"");
- return x;
-}
-function persistAndRefresh(){
- Object.values(users).forEach(normalizeUserData);
- const ok=saveUsers();
- if(!ok) console.warn("localStorage save failed");
- update();
- return ok;
-}
-
-/* START */
-loadUsers();
-const session=getSession();
-if(session){
+function restoreSession(){
   loadUsers();
-  if(users[session]&&!users[session].banned&&Number(users[session].suspendedUntil||0)<=Date.now()){
-    currentUser=session;
-    openGame();
-  }else{
+  const k=getSession();
+  if(!k||!users[k])return;
+  const x=users[k];
+  normalizeUserData(x);
+  if(x.banned || Number(x.suspendedUntil||0)>Date.now()){
     currentUser=null;
     saveSession();
+    return;
   }
+  currentUser=k;
+  openGame();
 }
-setInterval(()=>{
-  if(currentUser){
-    loadUsers();
-    if(users[currentUser]) saveUsers();
-  }
-},5000);
-window.addEventListener("beforeunload",()=>{
-  if(currentUser){
-    loadUsers();
-    saveUsers();
-    saveSession();
-  }
-});
-
-document.addEventListener("click",function(e){
- const btn=e.target.closest("button");
- if(!btn || btn.disabled)return;
- const id=btn.id;
- const smallActions=[
-   "giveCoinsBtn","suspendBtn","banBtn",
-   "addModeratorBtn","addStaffBtn",
-   "refreshBtn","saveProfileBtn","forgotBtn",
-   "loginBtn","createBtn"
- ];
- if(!smallActions.includes(id))return;
- if(btn.dataset.loadingHandled)return;
- btn.dataset.loadingHandled="1";
- const old=btn.innerHTML;
- let i=0;
- const frames=[".","..","...","....","...",".."];
- btn.disabled=true;
- btn.innerHTML=frames[0];
- const timer=setInterval(()=>{
-   i=(i+1)%frames.length;
-   if(document.body.contains(btn))btn.innerHTML=frames[i];
- },160);
- setTimeout(()=>{
-   clearInterval(timer);
-   if(document.body.contains(btn)){
-     btn.disabled=false;
-     btn.innerHTML=old;
-     delete btn.dataset.loadingHandled;
-   }
- },850);
-});
+window.addEventListener("DOMContentLoaded",restoreSession);
 </script>
 
 <div id="loadingOverlay" class="modal hidden">
@@ -969,589 +695,205 @@ document.addEventListener("click",function(e){
   </div>
 </div>
 
-<script id="compact-owner-profile-js">
-(function(){
-function findPlayer(name){
- const n=String(name||"").trim().toLowerCase();
- if(!n||typeof users!=="object")return null;
- for(const k in users)if(users[k]&&String(users[k].username||"").toLowerCase()===n)return users[k];
- return null;
-}
-window.showSearchedProfile=function(name){
- const p=findPlayer(name);if(!p)return;
- const modal=document.getElementById("viewProfileModal")||document.getElementById("profileModal");
- if(!modal)return;
- const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
- const fmt=n=>typeof money==="function"?money(Number(n)||0):(Number(n)||0).toLocaleString();
- const av=modal.querySelector("#viewAvatar"),nm=modal.querySelector("#viewName"),bio=modal.querySelector("#viewBio");
- const lk=modal.querySelector("#likes"),dl=modal.querySelector("#dislikes");
- if(av)av.innerHTML=(p.avatar||p.pfp)?'<img src="'+esc(p.avatar||p.pfp)+'" style="width:100%;height:100%;border-radius:50%;object-fit:cover">':"👤";
- if(nm)nm.textContent=p.username||"";
- if(bio)bio.textContent=p.bio||"No bio";
- if(lk)lk.textContent=Number(p.likes||0);
- if(dl)dl.textContent=Number(p.dislikes||0);
- let stats=modal.querySelector(".profile-money-stats");
- if(!stats){stats=document.createElement("div");stats.className="profile-money-stats";(modal.querySelector(".modal-box,.modal-content")||modal).appendChild(stats)}
- stats.innerHTML='<div class="profile-money-stat"><b>🏦 Bank</b><br>'+fmt(p.bank)+'</div><div class="profile-money-stat"><b>💵 Money</b><br>'+fmt(p.cash)+'</div>';
- modal.classList.remove("hidden");modal.style.display="";
-};
-window.openPlayerProfile=window.showSearchedProfile;
-window.goToProfile=window.showSearchedProfile;
 
-function makeAction(label,fn){
- const b=document.createElement("button");b.className="btn";b.textContent=label;
- b.onclick=function(){
-  const f=document.getElementById("ownerInlineForm");
-  if(f)f.classList.remove("hidden");
-  if(typeof fn==="function")try{fn()}catch(e){}
- };
- return b;
-}
-window.setupCompactOwner=function(){
- const panel=document.getElementById("managementPanel"),toggle=document.getElementById("ownerControlsButton");
- const box=document.getElementById("ownerControlBox"),grid=document.getElementById("ownerActionGrid");
- if(!panel||!toggle||!box||!grid||panel.dataset.ready==="1")return;
- panel.dataset.ready="1";
- toggle.onclick=()=>box.classList.toggle("hidden");
- const items=[
- ["🚫 Ban People",window.banForm],
- ["🛡️ Moderate Player",()=>typeof hireForm==="function"&&hireForm("moderator")],
- ["⭐ Staff Player",()=>typeof hireForm==="function"&&hireForm("staff")],
- ["⏸️ Suspend Player",window.suspendForm],
- ["💰 Give Coins",window.giveForm],
- ["🔓 Unban People",window.unbanForm],
- ["▶️ Unsuspended Player",window.unsuspendForm],
- ["🧹 Unmoderator",()=>typeof removeRoleForm==="function"&&removeRoleForm("moderator")],
- ["🧹 Unstaff",()=>typeof removeRoleForm==="function"&&removeRoleForm("staff")]
+
+<script id="cooldown-loading-fix">
+(function(){
+ function dots(btn,duration){
+   if(!btn||btn.disabled)return;
+   const old=btn.innerHTML,frames=["..","...","....","...",".."];
+   let i=0;btn.disabled=true;btn.innerHTML=frames[0];
+   const timer=setInterval(()=>{i=(i+1)%frames.length;btn.innerHTML=frames[i]},130);
+   setTimeout(()=>{clearInterval(timer);btn.disabled=false;btn.innerHTML=old},duration);
+ }
+ const map=[
+   ["workBtn",650],["crimeBtn",650],["upBtn",650],["downBtn",650],
+   ["depositBtn",650],["withdrawBtn",650]
  ];
- grid.innerHTML="";items.forEach(x=>grid.appendChild(makeAction(x[0],x[1])));
+ map.forEach(([id,d])=>{
+   const b=document.getElementById(id);
+   if(!b||b.dataset.cooldownLoad==="1")return;
+   const old=b.onclick;
+   b.onclick=function(){dots(b,d); if(typeof old==="function")old.call(b)};
+   b.dataset.cooldownLoad="1";
+ });
+ document.querySelectorAll(".coinBtn").forEach(b=>{
+   if(b.dataset.cooldownLoad==="1")return;
+   const old=b.onclick;
+   b.onclick=function(){dots(b,650); if(typeof old==="function")old.call(b)};
+   b.dataset.cooldownLoad="1";
+ });
+})();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<script id="single-panel-clean-js">
+(function(){
+"use strict";
+
+function srpMe(){try{return typeof u==="function"?u():null}catch(e){return null}}
+function srpOwner(){const x=srpMe();return !!x && key(x.username)===key(OWNER)}
+function srpMod(){const x=srpMe();return !!x && x.role==="moderator" && Number(x.moderatorUntil||0)>Date.now()}
+function srpStaff(){const x=srpMe();return !!x && x.role==="staff"}
+function srpCan(){return srpOwner()||srpMod()||srpStaff()}
+function srpFind(name){
+  const k=key(name);
+  if(!k)return null;
+  return users[k] || Object.values(users).find(v=>v&&key(v.username)===k) || null;
+}
+function srpSave(){try{saveUsers();}catch(e){}}
+function srpForm(title,fields,action){
+  const panel=document.getElementById("singleRolePanel");
+  if(!panel)return;
+  const actions=panel.querySelector(".srp-actions");
+  const form=panel.querySelector(".srp-form");
+  const titleEl=panel.querySelector(".srp-title");
+  if(actions)actions.style.display="none";
+  if(form)form.classList.remove("hidden");
+  if(titleEl)titleEl.textContent=title;
+  if(!form)return;
+  form.innerHTML=fields+
+    '<div class="srp-row"><button class="btn" id="srpConfirm">Confirm</button><button class="small" id="srpClose">Close</button></div>';
+  form.querySelector("#srpClose").onclick=srpHome;
+  form.querySelector("#srpConfirm").onclick=function(){
+    if(this.dataset.second!=="1"){
+      this.dataset.second="1";this.textContent="Are you sure?";return;
+    }
+    action(form);
+  };
+}
+function srpHome(){
+  const panel=document.getElementById("singleRolePanel");
+  if(!panel)return;
+  const actions=panel.querySelector(".srp-actions");
+  const form=panel.querySelector(".srp-form");
+  const title=panel.querySelector(".srp-title");
+  if(actions)actions.style.display="grid";
+  if(form){form.classList.add("hidden");form.innerHTML="";}
+  const x=srpMe();
+  if(title)title.textContent=srpOwner()?"👑 Owner — "+x.username:srpMod()?"🛡️ Moderator — "+x.username:"⭐ Staff — "+x.username;
+}
+function f(id,placeholder,type="text"){return '<input id="'+id+'" placeholder="'+placeholder+'" type="'+type+'">'}
+function target(form){return srpFind(form.querySelector("#srpUser").value)}
+
+function ban(){
+ srpForm("BAN PLAYER",f("srpUser","User?")+f("srpReason","Reason"),form=>{
+   const t=target(form);if(!t)return alert("Player not found.");
+   if(!srpOwner()&&key(t.username)===key(OWNER))return alert("Owner cannot be banned.");
+   t.banned=true;t.banReason=form.querySelector("#srpReason").value.trim()||"Rule violation";
+   t.cash=0;t.bank=0;t.coins=0;t.role="player";t.moderatorUntil=0;
+   srpSave();srpHome();update();
+ });
+}
+function suspend(){
+ srpForm("SUSPEND PLAYER",
+   f("srpUser","User?")+
+   '<select id="srpDays"><option value="1">1 day</option><option value="2">2 days</option><option value="3">3 days</option><option value="7">7 days</option></select>'+
+   f("srpReason","Reason?"),
+   form=>{
+     const t=target(form);if(!t)return alert("Player not found.");
+     if(Number(t.suspendedUntil||0)>Date.now())return alert("Player is already suspended.");
+     const reason=form.querySelector("#srpReason").value.trim()||"Rule violation";
+     t.suspendedUntil=Date.now()+Number(form.querySelector("#srpDays").value)*86400000;
+     t.suspendReason=reason;
+     if(/bad|abuse|farming|misuse/i.test(reason)){t.role="player";t.moderatorUntil=0}
+     srpSave();srpHome();update();
+   });
+}
+function give(){
+ srpForm("GIVE PLAYER COINS",f("srpUser","User?")+f("srpAmount","Amount","number"),form=>{
+   const t=target(form),a=Math.floor(Number(form.querySelector("#srpAmount").value));
+   if(!t)return alert("Player not found.");
+   if(!Number.isFinite(a)||a<1)return alert("Invalid amount.");
+   if(!srpOwner()&&a>50000)return alert("Moderator limit is 50,000 coins.");
+   t.cash=Number(t.cash||0)+a;t.coins=Number(t.coins||0)+a;
+   srpSave();srpHome();update();
+ });
+}
+function hire(role){
+ srpForm(role==="moderator"?"MODERATE PLAYER":"STAFF PLAYER",f("srpUser","User?"),form=>{
+   const t=target(form);if(!t)return alert("Player not found.");
+   if(role==="moderator"){t.role="moderator";t.moderatorUntil=Date.now()+3*60*60*1000}
+   else {t.role="staff";t.moderatorUntil=0}
+   srpSave();srpHome();update();
+ });
+}
+function simple(title,kind){
+ srpForm(title,f("srpUser","User?"),form=>{
+   const t=target(form);if(!t)return alert("Player not found.");
+   if(kind==="unban"){t.banned=false;t.banReason=""}
+   if(kind==="unsuspend"){t.suspendedUntil=0;t.suspendReason=""}
+   if(kind==="unmod"){t.role="player";t.moderatorUntil=0}
+   if(kind==="unstaff"){t.role="player";t.moderatorUntil=0}
+   srpSave();srpHome();update();
+ });
+}
+
+window.renderSingleRolePanel=function(){
+  const old=document.getElementById("singleRolePanel");
+  if(old)old.remove();
+
+  const me=srpMe();
+  if(!me || !srpCan())return;
+
+  const leaderboardCard=document.getElementById("leaderboard")?.closest(".card");
+  if(!leaderboardCard || !leaderboardCard.parentElement)return;
+
+  const panel=document.createElement("section");
+  panel.id="singleRolePanel";
+  panel.innerHTML='<div class="srp-title"></div><div class="srp-actions"></div><div class="srp-form hidden"></div>';
+
+  /* CRITICAL: sibling of leaderboard card, not child of leaderboard. */
+  leaderboardCard.parentElement.insertBefore(panel,leaderboardCard.nextSibling);
+
+  const title=panel.querySelector(".srp-title");
+  const grid=panel.querySelector(".srp-actions");
+  title.textContent=srpOwner()?"👑 Owner — "+me.username:srpMod()?"🛡️ Moderator — "+me.username:"⭐ Staff — "+me.username;
+
+  const add=(label,fn)=>{const b=document.createElement("button");b.className="btn";b.textContent=label;b.onclick=fn;grid.appendChild(b)}
+
+  if(srpOwner()){
+    add("Ban People",ban);
+    add("Moderate Player",()=>hire("moderator"));
+    add("Staff Player",()=>hire("staff"));
+    add("Suspend Player",suspend);
+    add("Give Coins",give);
+    add("Unban People",()=>simple("UNBAN PLAYER","unban"));
+    add("Unsuspend Player",()=>simple("UNSUSPEND PLAYER","unsuspend"));
+    add("Unmoderator People",()=>simple("UNMODERATOR PLAYER","unmod"));
+    add("Unstaff People",()=>simple("UNSTAFF PLAYER","unstaff"));
+  }else if(srpMod()){
+    add("Ban Player",ban);add("Suspend Player",suspend);add("Give Coins",give);
+  }else{
+    add("Suspend Player",suspend);
+    add("Unsuspend Player",()=>simple("UNSUSPEND PLAYER","unsuspend"));
+  }
 };
-document.addEventListener("click",function(e){
- const b=e.target.closest("[data-profile]");
- if(b){e.preventDefault();showSearchedProfile(b.getAttribute("data-profile"))}
-},true);
-setTimeout(setupCompactOwner,300);setInterval(()=>{try{setupCompactOwner()}catch(e){}},1000);
-})();
-</script>
 
-<script id="embedded-role-fix-js">
-(function(){
- function me(){try{return typeof u==="function"?u():null}catch(e){return null}}
- function activeRole(x,r){
-   if(!x)return false;
-   if(r==="moderator")return x.role==="moderator"&&Number(x.moderatorUntil||0)>Date.now();
-   return x.role==="staff";
- }
- function mk(text,fn){
-   const b=document.createElement("button");b.className="btn";b.textContent=text;
-   b.onclick=()=>{try{fn&&fn()}catch(e){}};
-   return b;
- }
- function rolePanel(id,title,buttons,visible){
-   const p=document.getElementById(id);if(!p)return;
-   p.classList.add("role-panel-compact");
-   p.style.display=visible?"block":"none";
-   p.classList.toggle("hidden",!visible);
-   if(!visible)return;
-   // Keep title/timer, replace only the action area.
-   let actions=p.querySelector(".role-buttons");
-   if(!actions){
-     actions=document.createElement("div");
-     actions.className="role-buttons";
-     p.appendChild(actions);
-   }
-   actions.innerHTML="";
-   buttons.forEach(x=>actions.appendChild(mk(x[0],x[1])));
- }
- window.fixRolePanelsEmbedded=function(){
-   const x=me();
-   const mod=activeRole(x,"moderator"),staff=activeRole(x,"staff");
-   rolePanel("moderatorPanel","🛡️ Moderator Panel",[
-     ["🚫 Ban",()=>typeof banForm==="function"&&banForm()],
-     ["⏸️ Suspend",()=>typeof suspendForm==="function"&&suspendForm()],
-     ["💰 Give Coins",()=>typeof giveForm==="function"&&giveForm()]
-   ],mod);
-   rolePanel("staffMemberPanel","⭐ Staff Panel",[
-     ["⏸️ Suspend",()=>typeof suspendForm==="function"&&suspendForm()]
-   ],staff);
- };
- // Make owner action forms stay embedded in the owner box.
- const oldSetup=window.setupCompactOwner;
- window.setupCompactOwner=function(){
-   if(typeof oldSetup==="function")try{oldSetup()}catch(e){}
-   const box=document.getElementById("ownerControlBox");
-   const form=document.getElementById("ownerInlineForm");
-   if(!box||!form)return;
-   form.classList.add("embedded-role-form");
-   // If an old handler created a form elsewhere, move it into the same box.
-   const legacy=document.getElementById("managementForm");
-   if(legacy && legacy!==form && legacy.parentElement!==box){
-     form.innerHTML="";
-     form.appendChild(legacy);
-   }
- };
- setTimeout(fixRolePanelsEmbedded,200);
- setInterval(fixRolePanelsEmbedded,700);
- setTimeout(setupCompactOwner,300);
- setInterval(setupCompactOwner,1200);
-})();
-</script>
-
-<script id="role-actions-final-js">
-(function(){
- function me(){try{return typeof u==="function"?u():null}catch(e){return null}}
- function call(name,...args){try{if(typeof window[name]==="function")return window[name](...args)}catch(e){}}
- function btn(text,fn){
-   const b=document.createElement("button");b.className="btn";b.textContent=text;
-   b.onclick=fn;return b;
- }
- function isMod(x){return x&&x.role==="moderator"&&Number(x.moderatorUntil||0)>Date.now()}
- function isStaff(x){return x&&x.role==="staff"}
-
- window.buildRolePanel=function(id,type){
-   const p=document.getElementById(id),x=me();
-   if(!p)return;
-   const active=type==="moderator"?isMod(x):isStaff(x);
-   p.classList.add("role-panel-compact");
-   p.classList.toggle("hidden",!active);
-   p.style.display=active?"block":"none";
-   if(!active)return;
-
-   let title=p.querySelector(".role-title");
-   if(!title){title=document.createElement("div");title.className="role-title";p.prepend(title)}
-   title.textContent=type==="moderator"?"🛡️ Moderator Panel":"⭐ Staff Panel";
-
-   let timer=p.querySelector(".role-timer");
-   if(!timer){timer=document.createElement("div");timer.className="role-timer";p.insertBefore(timer,title.nextSibling)}
-   if(type==="moderator"){
-     const mins=Math.max(0,Math.ceil((Number(x.moderatorUntil)-Date.now())/60000));
-     timer.textContent="Moderator access • "+mins+" minute(s) remaining";
-   }else timer.textContent="Staff access";
-
-   let row=p.querySelector(".role-buttons");
-   if(!row){row=document.createElement("div");row.className="role-buttons";p.appendChild(row)}
-   row.innerHTML="";
-   if(type==="moderator"){
-     row.append(btn("🚫 Ban Player",()=>call("banForm")));
-     row.append(btn("⏸️ Suspend Player",()=>call("suspendForm")));
-     row.append(btn("💰 Give Coins",()=>call("giveForm")));
-   }else{
-     row.append(btn("⏸️ Suspend Player",()=>call("suspendForm")));
-   }
- };
-
- window.buildRolePanels=function(){
-   buildRolePanel("moderatorPanel","moderator");
-   buildRolePanel("staffMemberPanel","staff");
- };
- setInterval(buildRolePanels,700);
- setTimeout(buildRolePanels,200);
-
- // Add owner-only Unban / Unsuspend / Unmoderator / Unstaff actions.
- window.addOwnerFinalActions=function(){
-   const grid=document.getElementById("ownerActionGrid");
-   if(!grid||grid.dataset.finalActions==="1")return;
-   grid.dataset.finalActions="1";
-   const extra=[
-     ["🔓 Unban Player",()=>call("unbanForm")],
-     ["▶️ Unsuspend Player",()=>call("unsuspendForm")],
-     ["🧹 Unmoderator Player",()=>call("removeRoleForm","moderator")],
-     ["🧹 Unstaff Player",()=>call("removeRoleForm","staff")]
-   ];
-   extra.forEach(x=>grid.append(btn(x[0],x[1])));
- };
- setTimeout(addOwnerFinalActions,600);
- setInterval(addOwnerFinalActions,1200);
-})();
-</script>
-
-<script id="role-form-fallback">
-(function(){
- function form(title,fields,confirmFn){
-   const f=document.getElementById("ownerInlineForm");
-   if(!f)return;
-   f.classList.remove("hidden");f.innerHTML="";
-   const h=document.createElement("div");h.style.fontWeight="700";h.textContent=title;f.appendChild(h);
-   const inputs={};
-   fields.forEach(x=>{
-     const i=document.createElement("input");i.className="input";i.placeholder=x[0];i.style.width="100%";i.style.boxSizing="border-box";i.style.marginTop="6px";f.appendChild(i);inputs[x[1]]=i;
-   });
-   const c=document.createElement("button");c.className="btn";c.style.marginTop="7px";c.textContent="Confirm";
-   c.onclick=()=>{if(confirm("Are you sure?"))confirmFn(inputs)};
-   f.appendChild(c);
-   const close=document.createElement("button");close.className="btn";close.style.marginLeft="5px";close.textContent="✕ Close";close.onclick=()=>f.classList.add("hidden");f.appendChild(close);
- }
- if(typeof window.unbanForm!=="function")window.unbanForm=()=>form("UNBAN PLAYER",[["Username","user"]],x=>alert("Unban request confirmed for "+x.user.value));
- if(typeof window.unsuspendForm!=="function")window.unsuspendForm=()=>form("UNSUSPEND PLAYER",[["Username","user"]],x=>alert("Unsuspend request confirmed for "+x.user.value));
- if(typeof window.removeRoleForm!=="function")window.removeRoleForm=role=>form(role==="moderator"?"UNMODERATOR PLAYER":"UNSTAFF PLAYER",[["Username","user"]],x=>alert("Action confirmed for "+x.user.value));
-})();
-</script>
-
-<script id="claim-notification-hook">
-(function(){
- window.showClaimNotice=function(kind,user){
-   const f=document.getElementById("ownerInlineForm");
-   if(!f)return;
-   const title=kind==="unban"?"🎉 You got unbanned":"🎉 You got unsuspended";
-   const reason=kind==="unban"?"You got unbanned because of a false report.":"You got unsuspended because of a false report.";
-   f.classList.remove("hidden");
-   f.innerHTML='<div style="font-weight:700">'+title+'</div><div style="margin-top:6px">'+reason+'</div><div style="margin-top:6px">Claims</div><button class="btn" style="margin-top:8px" onclick="this.parentElement.classList.add(\'hidden\')">Claim</button>';
- };
-})();
-</script>
-
-<script id="remove-legacy-owner-panels-js">
-(function(){
- const bad=[
-  "ownerStaffManagement","ownerStaffPanel","staffManagementPanel",
-  "zeenkoOwnerPanel","ownerPanel","legacyOwnerPanel","legacyStaffPanel"
- ];
- function hide(){
-   bad.forEach(id=>{
-     const el=document.getElementById(id);
-     if(el)el.remove();
-   });
-   document.querySelectorAll(".zeenko-owner-panel,.owner-staff-management,.owner-staff-panel")
-     .forEach(el=>el.remove());
- }
- hide();
- new MutationObserver(hide).observe(document.body,{childList:true,subtree:true});
-})();
-</script>
-
-
-
-
-
-
-
-
-<script id="restore-login-fix">
-(function(){
-  function ready(){try{restoreLogin()}catch(e){}}
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",ready);else ready();
-})();
-</script>
-
-
-
-<style id="authoritative-panel-css">
-#FINAL_SINGLE_PANEL{
-  margin:14px 0 0;
-  padding:18px;
-  border-radius:18px;
-  background:rgba(15,25,48,.98);
-  border:1px solid rgba(100,140,255,.35);
+function srpInit(){
+  if(typeof loadUsers==="function")loadUsers();
+  renderSingleRolePanel();
 }
-#FINAL_SINGLE_PANEL .final-title{font-size:24px;font-weight:900;margin-bottom:14px}
-#FINAL_PANEL_ACTIONS{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-#FINAL_PANEL_ACTIONS button{min-height:48px!important;font-size:13px!important}
-#FINAL_PANEL_FORM{margin-top:10px;padding:12px;border-radius:13px;border:1px solid rgba(100,140,255,.3)}
-#FINAL_PANEL_FORM.hidden{display:none!important}
-#FINAL_PANEL_FORM input,#FINAL_PANEL_FORM textarea,#FINAL_PANEL_FORM select{
- width:100%;box-sizing:border-box;margin:6px 0;padding:11px;border-radius:9px;font-size:14px
-}
-.final-form-buttons{display:flex;gap:6px;margin-top:8px}
-.final-form-buttons button{flex:1;min-height:44px!important}
-.final-confirm-warning{
- display:block;text-align:center;font-weight:800;margin-top:6px;
- color:#ffd166;
-}
-@media(max-width:600px){
- #FINAL_SINGLE_PANEL{padding:14px}
- #FINAL_PANEL_ACTIONS{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
- #FINAL_PANEL_ACTIONS button{font-size:12px!important}
-}
-</style>
-<script id="AUTHORITATIVE_SINGLE_PANEL">
-(function(){
-  const OWNER_NAME="Zeenko";
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(srpInit,250));
+else setTimeout(srpInit,250);
 
-  function me(){try{return typeof u==="function"?u():null}catch(e){return null}}
-  function isOwner(){
-    const x=me(); return !!x && String(x.username||"").toLowerCase()===OWNER_NAME.toLowerCase();
-  }
-  function isModerator(){
-    const x=me(); return !!x && x.role==="moderator" &&
-      Number(x.moderatorUntil||0)>Date.now();
-  }
-  function isStaff(){
-    const x=me(); return !!x && x.role==="staff";
-  }
-  function findPlayer(name){
-    const n=String(name||"").trim().toLowerCase();
-    if(!n || typeof users!=="object")return null;
-    if(users[n])return users[n];
-    for(const k of Object.keys(users)){
-      const p=users[k];
-      if(p && String(p.username||"").toLowerCase()===n)return p;
-    }
-    return null;
-  }
-  function persist(){
-    try{
-      if(typeof saveUsers==="function")return !!saveUsers();
-      localStorage.setItem("injuriesx2_users_v3",JSON.stringify(users));
-      return true;
-    }catch(e){return false}
-  }
-  function refresh(){
-    try{if(typeof renderLeaderboard==="function")renderLeaderboard()}catch(e){}
-    try{if(typeof renderSearch==="function")renderSearch()}catch(e){}
-    try{if(typeof update==="function")update()}catch(e){}
-  }
-  function input(id,placeholder,type){
-    return '<input id="'+id+'" placeholder="'+placeholder+'" type="'+(type||"text")+'">';
-  }
-
-  function closeForm(){
-    const f=document.getElementById("FINAL_PANEL_FORM");
-    const a=document.getElementById("FINAL_PANEL_ACTIONS");
-    const t=document.getElementById("FINAL_PANEL_TITLE");
-    if(f){f.classList.add("hidden");f.innerHTML=""}
-    if(a)a.style.display="grid";
-    if(t)t.textContent=isOwner()?"👑 Owner Panel":isModerator()?"🛡️ Moderator Panel":"⭐ Staff Panel";
-  }
-
-  // Two-click confirmation: first click changes Confirm -> Are you sure?
-  // second click actually performs the action. No browser confirm popup.
-  function form(title,html,action){
-    const f=document.getElementById("FINAL_PANEL_FORM");
-    const a=document.getElementById("FINAL_PANEL_ACTIONS");
-    const t=document.getElementById("FINAL_PANEL_TITLE");
-    if(!f)return;
-
-    a.style.display="none";
-    t.textContent=title;
-    f.classList.remove("hidden");
-    f.innerHTML=html+
-      '<div class="final-form-buttons">'+
-      '<button class="btn" id="finalConfirm">Confirm</button>'+
-      '<button class="small" id="finalClose">✕ Close</button>'+
-      '</div>';
-
-    const confirmBtn=document.getElementById("finalConfirm");
-    const closeBtn=document.getElementById("finalClose");
-    let armed=false;
-
-    closeBtn.onclick=closeForm;
-    confirmBtn.onclick=function(){
-      if(!armed){
-        armed=true;
-        confirmBtn.textContent="Are you sure?";
-        confirmBtn.dataset.armed="1";
-        const note=document.createElement("div");
-        note.className="final-confirm-warning";
-        note.id="finalConfirmNote";
-        note.textContent="Press again to confirm.";
-        f.appendChild(note);
-        return;
-      }
-      action(f);
-    };
-  }
-
-  function done(message){
-    refresh();
-    closeForm();
-    if(message)alert(message);
-  }
-
-  const actions={
-    ban:function(){
-      form("🚫 BAN PLAYER",
-        input("user","Username")+input("reason","Reason"),
-        function(f){
-          const p=findPlayer(f.querySelector("#user").value);
-          const reason=String(f.querySelector("#reason").value||"").trim();
-          if(!p)return alert("Player not found.");
-          if(String(p.username||"").toLowerCase()===OWNER_NAME.toLowerCase())
-            return alert("The owner cannot be banned.");
-          if(!reason)return alert("Enter a reason.");
-          p.banned=true;
-          p.banReason=reason;
-          p.suspendedUntil=0;
-          // Keep the player's data, but make the account inaccessible.
-          if(!persist())return alert("Could not save the ban.");
-          done("🚫 "+p.username+" has been banned.");
-        });
-    },
-    suspend:function(){
-      form("⏸️ SUSPEND PLAYER",
-        input("user","Username")+
-        '<select id="days"><option value="1">1 day</option><option value="2">2 days</option><option value="3">3 days</option><option value="7">7 days</option></select>'+
-        input("reason","Reason"),
-        function(f){
-          const p=findPlayer(f.querySelector("#user").value);
-          const days=Math.floor(Number(f.querySelector("#days").value));
-          const reason=String(f.querySelector("#reason").value||"").trim();
-          if(!p)return alert("Player not found.");
-          if(String(p.username||"").toLowerCase()===OWNER_NAME.toLowerCase())
-            return alert("The owner cannot be suspended.");
-          if(Number(p.suspendedUntil||0)>Date.now())return alert("Player is already suspended.");
-          if(!reason)return alert("Enter a reason.");
-          p.suspendedUntil=Date.now()+days*86400000;
-          p.suspendReason=reason;
-          if(!persist())return alert("Could not save the suspension.");
-          done("⏸️ "+p.username+" suspended.");
-        });
-    },
-    give:function(){
-      form("💰 GIVE PLAYER COINS",
-        input("user","Username")+input("amount","Amount","number"),
-        function(f){
-          const p=findPlayer(f.querySelector("#user").value);
-          const amount=Math.floor(Number(f.querySelector("#amount").value));
-          if(!p)return alert("Player not found.");
-          if(p.banned)return alert("That player is banned.");
-          if(!Number.isFinite(amount)||amount<1)return alert("Enter a valid amount.");
-          if(!isOwner()&&amount>50000)return alert("Moderator limit is 50,000 coins.");
-          p.cash=Math.max(0,Math.floor(Number(p.cash)||0))+amount;
-          // coins mirrors the visible money total used by older versions.
-          p.coins=Math.max(0,Math.floor(Number(p.coins)||0))+amount;
-          if(!persist())return alert("Could not save the coins.");
-          done("💰 Gave "+amount.toLocaleString()+" coins to "+p.username+".");
-        });
-    },
-    moderate:function(){
-      form("🛡️ MODERATE PLAYER",input("user","Username"),function(f){
-        const p=findPlayer(f.querySelector("#user").value);
-        if(!p)return alert("Player not found.");
-        if(String(p.username||"").toLowerCase()===OWNER_NAME.toLowerCase())return alert("That account is the owner.");
-        p.role="moderator";
-        p.moderatorUntil=Date.now()+3*60*60*1000;
-        if(!persist())return alert("Could not save the moderator role.");
-        done("🛡️ "+p.username+" is now a moderator for 3 hours.");
-      });
-    },
-    staffHire:function(){
-      form("⭐ STAFF PLAYER",input("user","Username"),function(f){
-        const p=findPlayer(f.querySelector("#user").value);
-        if(!p)return alert("Player not found.");
-        if(String(p.username||"").toLowerCase()===OWNER_NAME.toLowerCase())return alert("That account is the owner.");
-        p.role="staff";p.moderatorUntil=0;
-        if(!persist())return alert("Could not save the staff role.");
-        done("⭐ "+p.username+" is now staff.");
-      });
-    },
-    unban:function(){
-      form("🔓 UNBAN PLAYER",input("user","Username"),function(f){
-        const p=findPlayer(f.querySelector("#user").value);
-        if(!p)return alert("Player not found.");
-        p.banned=false;p.banReason="";
-        if(!persist())return alert("Could not save the unban.");
-        done("🔓 "+p.username+" has been unbanned.");
-      });
-    },
-    unsuspend:function(){
-      form("▶️ UNSUSPEND PLAYER",input("user","Username"),function(f){
-        const p=findPlayer(f.querySelector("#user").value);
-        if(!p)return alert("Player not found.");
-        p.suspendedUntil=0;p.suspendReason="";
-        if(!persist())return alert("Could not save the unsuspension.");
-        done("▶️ "+p.username+" has been unsuspended.");
-      });
-    },
-    unmod:function(){
-      form("🧹 UNMODERATOR PLAYER",input("user","Username"),function(f){
-        const p=findPlayer(f.querySelector("#user").value);
-        if(!p)return alert("Player not found.");
-        p.role="player";p.moderatorUntil=0;
-        if(!persist())return alert("Could not save the change.");
-        done("🧹 Moderator role removed from "+p.username+".");
-      });
-    },
-    unstaff:function(){
-      form("🧹 UNSTAFF PLAYER",input("user","Username"),function(f){
-        const p=findPlayer(f.querySelector("#user").value);
-        if(!p)return alert("Player not found.");
-        p.role="player";p.moderatorUntil=0;
-        if(!persist())return alert("Could not save the change.");
-        done("🧹 Staff role removed from "+p.username+".");
-      });
-    }
-  };
-
-  function removeOldPanels(){
-    [
-      "singleLargeOwnerBox","managementPanel","ownerTools","staffPanel",
-      "ownerStaffManagement","ownerStaffPanel","staffManagementPanel",
-      "zeenkoOwnerPanel","ownerPanel","legacyOwnerPanel","legacyStaffPanel"
-    ].forEach(id=>{
-      const el=document.getElementById(id);
-      if(el && id!=="FINAL_SINGLE_PANEL")el.remove();
-    });
-    document.querySelectorAll(".zeenko-owner-panel,.owner-staff-management,.owner-staff-panel")
-      .forEach(el=>el.remove());
-  }
-
-  function install(){
-    removeOldPanels();
-    const lb=document.getElementById("leaderboard");
-    if(!lb)return;
-
-    const can=isOwner()||isModerator()||isStaff();
-    let panel=document.getElementById("FINAL_SINGLE_PANEL");
-    if(!can){
-      if(panel)panel.remove();
-      return;
-    }
-    if(panel)return;
-
-    panel=document.createElement("div");
-    panel.id="FINAL_SINGLE_PANEL";
-    panel.innerHTML=
-      '<div id="FINAL_PANEL_TITLE" class="final-title"></div>'+
-      '<div id="FINAL_PANEL_ACTIONS"></div>'+
-      '<div id="FINAL_PANEL_FORM" class="hidden"></div>';
-
-    // Keep the panel outside #leaderboard's rendered player rows so update()
-    // cannot erase it.
-    lb.parentNode.appendChild(panel);
-
-    const title=panel.querySelector("#FINAL_PANEL_TITLE");
-    const grid=panel.querySelector("#FINAL_PANEL_ACTIONS");
-    title.textContent=isOwner()?"👑 Owner Panel":isModerator()?"🛡️ Moderator Panel":"⭐ Staff Panel";
-    grid.style.display="grid";
-    grid.style.gridTemplateColumns="repeat(3,minmax(0,1fr))";
-    grid.style.gap="6px";
-
-    function add(label,fn){
-      const b=document.createElement("button");
-      b.className="btn";
-      b.textContent=label;
-      b.onclick=fn;
-      grid.appendChild(b);
-    }
-
-    if(isOwner()){
-      add("🚫 Ban People",actions.ban);
-      add("🛡️ Moderate Player",actions.moderate);
-      add("⭐ Staff Player",actions.staffHire);
-      add("⏸️ Suspend Player",actions.suspend);
-      add("💰 Give Coins",actions.give);
-      add("🔓 Unban People",actions.unban);
-      add("▶️ Unsuspend Player",actions.unsuspend);
-      add("🧹 Unmoderator",actions.unmod);
-      add("🧹 Unstaff",actions.unstaff);
-    }else if(isModerator()){
-      add("🚫 Ban Player",actions.ban);
-      add("⏸️ Suspend Player",actions.suspend);
-      add("💰 Give Coins",actions.give);
-    }else{
-      add("⏸️ Suspend Player",actions.suspend);
-    }
-  }
-
-  // Prevent the old staff updater from bringing its old panel back.
-  window.updateStaff=function(){
-    removeOldPanels();
-    install();
-  };
-
-  setTimeout(install,250);
-  setInterval(install,1000);
+/* Re-render only when no form is open. This prevents the panel from glitching/vanishing. */
+setInterval(()=>{
+  const panel=document.getElementById("singleRolePanel");
+  const form=panel?.querySelector(".srp-form");
+  if(!panel)renderSingleRolePanel();
+  else if(form?.classList.contains("hidden")){}
+},2000);
 })();
 </script>
 </body>
-  </html>
+                                                                                                                                 </html>
