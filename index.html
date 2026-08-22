@@ -41,8 +41,7 @@ textarea{resize:vertical;min-height:80px}
 .stat{min-height:120px}.icon{font-size:25px}.label{color:#9eabc1;font-size:13px;margin-top:8px}.value{font-size:27px;font-weight:800;margin-top:6px}
 .actions{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.action{background:#0b1220;border:1px solid #31415f;border-radius:13px;padding:16px}
 .action h3{margin:0 0 7px}.action p{color:#8e9ab0;font-size:13px}
-.leader-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.leader-top h2{margin:0}.leader-top .small{min-width:110px}
-#leaderboard{width:100%}
+.leader-top{display:flex;justify-content:space-between;align-items:center}.leader-top h2{margin:0}
 .row{display:grid;grid-template-columns:45px 1fr 150px;align-items:center;gap:10px;padding:12px 3px;border-top:1px solid #293750}
 .player{display:flex;align-items:center;gap:10px}.player-name{font-weight:bold}.details{color:#7e8ba1;font-size:12px;margin-top:3px}.total{text-align:right;font-weight:bold}
 .modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:15px;background:#000b}
@@ -52,59 +51,65 @@ textarea{resize:vertical;min-height:80px}
 @keyframes load{0%,100%{opacity:.2}50%{opacity:1}}
 .reward-box{border:1px solid #397cff;background:#0b1730;border-radius:12px;padding:14px;margin-top:12px}
 .choice{display:grid;grid-template-columns:1fr 1fr;gap:8px}.choice button{padding:13px}
-.reaction{display:flex;gap:8px;margin-top:14px}.reaction button{flex:1}
+.reaction{display:flex;justify-content:center;gap:10px;margin-top:14px}.vote-pill{display:inline-flex;align-items:center;justify-content:center;min-width:90px;padding:9px 14px;border-radius:999px;background:#303b54;color:#fff;font-weight:800;cursor:pointer;user-select:none}.vote-pill:hover{filter:brightness(1.12)}.vote-pill:active{transform:scale(.98)}
 @media(max-width:700px){.stats,.actions{grid-template-columns:1fr}.profile{align-items:flex-start}.profile-buttons{flex-direction:column}.row{grid-template-columns:35px 1fr 95px}}
 
 #loadingOverlay{z-index:100}
 .staff-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.staff-grid .btn{width:100%;min-height:48px;font-size:16px}
+.staff-grid .btn{width:100%}
 @media(max-width:600px){.staff-grid{grid-template-columns:1fr}}
-</style>
 
+/* Leaderboard text fix: keep player information clearly white. */
+.leaderboard-player,.leaderboard-player .player-name,.leaderboard-player .details,.leaderboard-player .total{color:#fff!important}
+.leaderboard-player .details{opacity:.95}
 
-
-
-
-
-
-
-
-
-
-
-
-<style id="single-panel-clean-css">
-#singleRolePanel{
-  display:block!important;width:100%!important;clear:both!important;
-  margin:28px 0 0!important;padding:16px!important;
-  border:1px solid #39537d!important;border-radius:16px!important;
-  background:#0e1729!important;box-sizing:border-box!important
+/* FINAL LEADERBOARD LOOK */
+.leaderboard-player{
+  display:grid!important;
+  grid-template-columns:45px 1fr 150px!important;
+  width:100%!important;
+  background:transparent!important;
+  background-color:transparent!important;
+  color:#fff!important;
+  border:0!important;
+  box-shadow:none!important;
+  cursor:default!important;
+  text-align:left!important;
+  padding:12px 3px!important;
 }
+.leaderboard-player:hover,
+.leaderboard-player:focus,
+.leaderboard-player:active{
+  background:transparent!important;
+  background-color:transparent!important;
+  outline:none!important;
+}
+.leaderboard-player .player-name,
+.leaderboard-player .details,
+.leaderboard-player .total{
+  color:#fff!important;
+}
+</style>
+<style id="single-panel-clean-css">
+#singleRolePanel{display:block!important;width:100%!important;clear:both!important;margin:28px 0 0!important;padding:16px!important;border:1px solid #39537d!important;border-radius:16px!important;background:#0e1729!important;box-sizing:border-box!important}
 #singleRolePanel .srp-title{font-size:20px;font-weight:800;margin-bottom:10px}
 #singleRolePanel .srp-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 #singleRolePanel .srp-actions button{min-height:44px!important}
-#singleRolePanel .srp-form{
-  margin-top:10px;padding:11px;border:1px solid #33486e;border-radius:11px
-}
+#singleRolePanel .srp-form{margin-top:10px;padding:11px;border:1px solid #33486e;border-radius:11px}
 #singleRolePanel .srp-form.hidden{display:none!important}
-#singleRolePanel input,#singleRolePanel textarea,#singleRolePanel select{
-  width:100%;box-sizing:border-box;margin:5px 0;padding:10px;
-  border:1px solid #405273;border-radius:8px;background:#0b1220;color:#fff
-}
+#singleRolePanel input,#singleRolePanel textarea,#singleRolePanel select{width:100%;box-sizing:border-box;margin:5px 0;padding:10px;border:1px solid #405273;border-radius:8px;background:#0b1220;color:#fff}
 #singleRolePanel .srp-row{display:flex;gap:6px;margin-top:7px}
 #singleRolePanel .srp-row button{flex:1;min-height:40px}
 @media(max-width:650px){#singleRolePanel .srp-actions{grid-template-columns:1fr 1fr}}
 </style>
-<style>
-/* REMOVE LEGACY MANAGEMENT PANELS */
-.legacy-owner-management,
-.owner-staff-management,
-.staff-management,
-.owner-management,
-#ownerStaffManagement,
-#staffManagement,
-#ownerManagement{display:none!important}
-</style></head>
+
+<style id="refresh-location-fix">
+.refresh-under-challenge #refreshBtn{
+  width:100%!important;
+  margin:0!important;
+}
+</style>
+</head>
 <body>
 <header>
 <h1>💰 InjuriesX2</h1><p>Economy Game</p>
@@ -113,7 +118,7 @@ textarea{resize:vertical;min-height:80px}
 
 <main class="container">
 <section id="auth" class="card auth">
-<h2>👋 Welcome</h2><div class="sub">Login or create your account</div>
+<div class="refresh-under-challenge" style="margin:14px 0;text-align:center;"><button id="refreshBtn" class="small">🔄 Refresh</button></div><h2>👋 Welcome</h2><div class="sub">Login or create your account</div>
 <div class="tabs">
 <button id="loginTab" class="tab active">🔑 Login</button>
 <button id="registerTab" class="tab">👤 Create Account</button>
@@ -200,23 +205,8 @@ textarea{resize:vertical;min-height:80px}
 </section>
 
 <section class="card">
-<div class="leader-top"><h2>🏆 Leaderboard</h2><button id="refreshBtn" class="small">🔄 Refresh</button></div>
+<div class="leader-top"><h2>🏆 Leaderboard</h2></div>
 <div id="leaderboard"></div>
-</section>
-
-
-<div id="staffMsg" class="message"></div>
-
-<div id="ownerTools" class="hidden" style="margin-top:16px;padding-top:15px;border-top:1px solid #293750">
-<h3>👑 Owner Staff Management</h3>
-<label>Staff username</label><input id="staffAddName" placeholder="Username">
-<div class="staff-grid">
-<button id="addModeratorBtn" class="btn">🛡️ Add Moderator</button>
-<button id="addStaffBtn" class="btn">⭐ Add Staff</button>
-</div>
-<div class="details" style="margin-top:8px">Enter a player's username above, then choose a role.</div>
-</div>
-</section>
 </section>
 </main>
 
@@ -230,8 +220,8 @@ textarea{resize:vertical;min-height:80px}
 
 <div id="viewProfileModal" class="modal hidden"><div class="modal-box">
 <div style="display:flex;justify-content:space-between;align-items:center"><h2>👤 Player Profile</h2><button id="closeViewProfile" class="small">✕ Close</button></div>
-<div style="text-align:center"><div id="viewAvatar" class="avatar" style="margin:auto;width:90px;height:90px;font-size:40px">👤</div><h2 id="viewName"></h2><div id="viewBio" class="muted"></div><div id="viewCountry" class="muted"></div></div>
-<div class="reaction"><button id="likeBtn" class="btn">👍 <span id="likes">0</span></button><button id="dislikeBtn" class="small">👎 <span id="dislikes">0</span></button></div>
+<div style="text-align:center"><div id="viewAvatar" class="avatar" style="margin:auto;width:90px;height:90px;font-size:40px">👤</div><h2 id="viewName"></h2><div id="viewBio" class="muted"></div><div id="viewCountry" class="muted"></div><div id="viewBalance" style="margin-top:10px;font-weight:800;color:#fff">Balance: 🪙 0</div><div id="viewBank" style="font-weight:800;color:#fff">Bank: 🪙 0</div></div>
+<div class="reaction"><span id="likeBtn" class="vote-pill" role="button" tabindex="0">👍 <span id="likes">0</span></span><span id="dislikeBtn" class="vote-pill" role="button" tabindex="0">👎 <span id="dislikes">0</span></span></div><div id="voteMsg" class="message" style="text-align:center;margin-top:10px"></div>
 </div></div>
 
 <script>
@@ -241,34 +231,27 @@ const USERS_KEY="injuriesx2_users_v3";
 const SESSION_KEY="injuriesx2_session_v3";
 const OWNER="Zeenko";
 const PASSWORD_COOLDOWN=12*60*60*1000;
-const AVATAR_COOLDOWN=3*24*60*60*1000;
-const USERNAME_COOLDOWN=7*24*60*60*1000;
+const USERNAME_COOLDOWN=3*24*60*60*1000;
 
 let users={},currentUser=null,selectedPFP="",viewedPlayer=null,numberBusy=false;
 
+function showLoading(duration,callback){
+ const overlay=document.getElementById("loadingOverlay");
+ const dots=document.getElementById("loadDots");
+ if(!overlay){if(typeof callback==="function")callback();return}
+ overlay.classList.remove("hidden");
+ let i=0;
+ if(dots)dots.textContent=".";
+ const timer=setInterval(()=>{i=(i+1)%4;if(dots)dots.textContent=".".repeat(i||1)},180);
+ setTimeout(()=>{clearInterval(timer);overlay.classList.add("hidden");if(typeof callback==="function")callback()},duration||700);
+}
 function loadUsers(){
  try{users=JSON.parse(localStorage.getItem(USERS_KEY)||"{}")}catch(e){users={}}
  if(!users||typeof users!=="object")users={};
  Object.keys(users).forEach(k=>normalizeUserData(users[k]));
 }
 function saveUsers(){
- try{
-   localStorage.setItem(USERS_KEY,JSON.stringify(users));
-   return localStorage.getItem(USERS_KEY)!==null;
- }catch(e){
-   console.error("Save error:",e);
-   return false;
- }
-}
-function saveSession(){
- try{
-   if(currentUser) localStorage.setItem(SESSION_KEY,currentUser);
-   else localStorage.removeItem(SESSION_KEY);
-   return true;
- }catch(e){ console.error("Session save error:",e); return false; }
-}
-function getSession(){
- try{return localStorage.getItem(SESSION_KEY)||""}catch(e){return ""}
+ try{localStorage.setItem(USERS_KEY,JSON.stringify(users));return true}catch(e){return false}
 }
 function norm(v){return String(v||"").trim()}
 function key(v){return norm(v).toLowerCase()}
@@ -311,45 +294,21 @@ function createAccount(){
  if(pass!==confirm)return msg("authMsg","Passwords do not match.","error");
  if(users[k])return msg("authMsg","Name already taken.","error");
  users[k]={username:name,password:pass,bio:"",country:"",avatar:"",cash:1000,bank:0,lastWork:0,lastCrime:0,lastDaily:0,lastUsernameChange:0,lastPasswordChange:0,banned:false,suspendedUntil:0,role:"player",likes:0,dislikes:0};
- if(!saveUsers()){delete users[k];return msg("authMsg","Could not save account.","error")}
- saveUsers();
-currentUser=k;
-saveSession();
-showLoading(700,openGame);
+ normalizeUserData(users[k]);
+ if(!saveUsers())return msg("authMsg","Could not save account. Your browser may be blocking local storage.","error");
+ currentUser=k;
+ localStorage.setItem(SESSION_KEY,currentUser);
+ showLoading(700,openGame);
 }
 
 function login(){
-  loadUsers();
-
-  const name=norm(document.getElementById("loginUsername").value);
-  const pass=String(document.getElementById("loginPassword").value||"");
-  const k=key(name);
-  const x=users[k];
-
-  if(!name||!pass)return msg("authMsg","Enter your username and password.","error");
-  if(!x)return msg("authMsg","Account not found.","error");
-
-  normalizeUserData(x);
-
-  if(String(x.password??"")!==pass)
-    return msg("authMsg","Incorrect password.","error");
-
-  if(x.banned)
-    return msg("authMsg","This account is banned.","error");
-
-  if(Number(x.suspendedUntil||0)>Date.now())
-    return msg("authMsg","This account is suspended.","error");
-
-  currentUser=k;
-  users[k]=x;
-
-  if(!saveUsers())
-    return msg("authMsg","Could not save login session.","error");
-
-  saveSession();
-
-  // Open directly; don't use the old loading animation that could interrupt login.
-  openGame();
+ loadUsers();
+ const name=norm(document.getElementById("loginUsername").value),pass=document.getElementById("loginPassword").value,k=key(name),x=users[k];
+ if(!x)return msg("authMsg","Account not found.","error");
+ if(x.banned)return msg("authMsg","This account is banned.","error");
+ if(Number(x.suspendedUntil||0)>Date.now())return msg("authMsg","This account is suspended.","error");
+ if(x.password!==pass)return msg("authMsg","Incorrect password.","error");
+ currentUser=k;localStorage.setItem(SESSION_KEY,currentUser);loadUsers();showLoading(700,openGame);
 }
 
 function changePassword(){
@@ -363,34 +322,11 @@ function changePassword(){
  x.password=newp;x.lastPasswordChange=Date.now();saveUsers();msg("forgotMsg","Password changed successfully!","success");setTimeout(showLogin,700);
 }
 
-function openGame(){
-  loadUsers();
-  if(!currentUser || !users[currentUser]){
-    currentUser=null;
-    saveSession();
-    document.getElementById("game").classList.add("hidden");
-    document.getElementById("auth").classList.remove("hidden");
-    showLogin();
-    return;
-  }
-  currentUser=key(users[currentUser].username);
-  saveSession();
-  document.getElementById("auth").classList.add("hidden");
-  document.getElementById("game").classList.remove("hidden");
-  update();
-}
-function logout(){
-  if(currentUser) saveUsers();
-  currentUser=null;
-  saveSession();
-  document.getElementById("game").classList.add("hidden");
-  document.getElementById("auth").classList.remove("hidden");
-  document.getElementById("loginUsername").value="";
-  document.getElementById("loginPassword").value="";
-  showLogin();
-}
+function openGame(){document.getElementById("auth").classList.add("hidden");document.getElementById("game").classList.remove("hidden");update()}
+function logout(){currentUser=null;localStorage.removeItem(SESSION_KEY);document.getElementById("game").classList.add("hidden");document.getElementById("auth").classList.remove("hidden");showLogin()}
 
 function update(){
+ loadUsers();
  const x=u();if(!x)return;
  document.getElementById("username").textContent=x.username;
  document.getElementById("profileBioPreview").textContent=x.bio||"No bio";
@@ -399,7 +335,7 @@ function update(){
  document.getElementById("bank").textContent=money(x.bank);
  document.getElementById("total").textContent=money(Number(x.cash||0)+Number(x.bank||0));
  setAvatar(document.getElementById("mainAvatar"),x.avatar);
- renderLeaderboard();renderSearch();updateStaff();
+ renderLeaderboard();renderSearch();
 }
 function setAvatar(el,src){el.innerHTML=src?'<img src="'+src+'" alt="PFP">':"👤"}
 
@@ -408,14 +344,12 @@ document.getElementById("registerTab").onclick=showRegister;
 document.getElementById("forgotBtn").onclick=showForgot;
 document.getElementById("forgotCloseBtn").onclick=showLogin;
 document.getElementById("loginBtn").onclick=login;
-  document.getElementById("loginUsername").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
-  document.getElementById("loginPassword").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
 document.getElementById("registerBtn").onclick=createAccount;
 document.getElementById("changePasswordBtn").onclick=changePassword;
 document.getElementById("logoutBtn").onclick=logout;
 
 document.getElementById("workBtn").onclick=function(){
- const x=u();if(Date.now()-(x.lastWork||0)<10000)return msg("workMsg","Wait before working again.","error");
+ const x=u();if(Date.now()-(x.lastWork||0)<45000)return msg("workMsg","Wait before working again.","error");
  const r=Math.floor(Math.random()*1001)+500;x.cash+=r;x.lastWork=Date.now();saveUsers();update();msg("workMsg","💼 You earned "+money(r)+"!","success");
 };
 document.getElementById("crimeBtn").onclick=function(){
@@ -430,10 +364,7 @@ document.getElementById("dailyBtn").onclick=function(){
  const r=Math.floor(Math.random()*1001)+1000;x.cash+=r;x.lastDaily=Date.now();saveUsers();update();msg("dailyMsg","🎁 +"+money(r),"success");
 };
 document.querySelectorAll(".coinBtn").forEach(b=>b.onclick=function(){
- const x=u();
-  if(Date.now()-(x.lastCoinflip||0)<5000)return msg("coinMsg","Wait 5 seconds.","error");
-  x.lastCoinflip=Date.now();
-  const bet=Math.floor(Number(document.getElementById("coinBet").value)),result=Math.random()<.5?"heads":"tails";
+ const x=u(),bet=Math.floor(Number(document.getElementById("coinBet").value)),result=Math.random()<.5?"heads":"tails";
  if(!Number.isFinite(bet)||bet<=0)return msg("coinMsg","Enter a valid bet.","error");
  if(bet>x.cash)return msg("coinMsg","Not enough cash.","error");
  if(result===this.dataset.side){x.cash+=bet;msg("coinMsg","🟢 Won "+money(bet)+"!","success")}
@@ -455,12 +386,37 @@ document.getElementById("withdrawBtn").onclick=function(){
 };
 
 function playNumber(dir){
- if(numberBusy)return;const x=u(),bet=Math.floor(Number(document.getElementById("upDownBet").value));
+ if(numberBusy)return;
+ const x=u(),bet=Math.floor(Number(document.getElementById("upDownBet").value));
  if(!Number.isFinite(bet)||bet<=0)return msg("upDownMsg","Enter a valid bet.","error");
  if(bet>x.cash)return msg("upDownMsg","Not enough cash.","error");
- numberBusy=true;const d=document.getElementById("number"),old=Math.floor(Math.random()*100)+1;let ticks=0;
- const timer=setInterval(()=>{d.textContent=Math.floor(Math.random()*100)+1;ticks++;if(ticks>=20){clearInterval(timer);let fin=Math.floor(Math.random()*100)+1;if(fin===old)fin=dir==="up"?Math.min(100,old+1):Math.max(1,old-1);d.textContent=fin;if((dir==="up"&&fin>old)||(dir==="down"&&fin<old)){x.cash+=bet;msg("upDownMsg",old+" → "+fin+" • Won "+money(bet),"success")}else{x.cash-=bet;msg("upDownMsg",old+" → "+fin+" • Lost "+money(bet),"error")}saveUsers();update();numberBusy=false}},100)
+
+ numberBusy=true;
+ const d=document.getElementById("number");
+ const old=Math.floor(Math.random()*100)+1;
+ let ticks=0;
+ const timer=setInterval(()=>{
+   d.textContent=Math.floor(Math.random()*100)+1;
+   ticks++;
+   if(ticks>=20){
+     clearInterval(timer);
+     let fin;
+     do{fin=Math.floor(Math.random()*100)+1}while(fin>=51&&fin<=59);
+     d.textContent=fin;
+
+     const won=dir==="up" ? fin>=60 : fin<=50;
+     if(won){
+       x.cash+=bet;
+       msg("upDownMsg",old+" → "+fin+" • Won "+money(bet),"success");
+     }else{
+       x.cash-=bet;
+       msg("upDownMsg",old+" → "+fin+" • Lost "+money(bet),"error");
+     }
+     saveUsers();update();numberBusy=false;
+   }
+ },100);
 }
+
 document.getElementById("upBtn").onclick=()=>playNumber("up");
 document.getElementById("downBtn").onclick=()=>playNumber("down");
 
@@ -471,429 +427,560 @@ document.getElementById("challengeBtn").onclick=function(){
  msg("challengeMsg","⚔️ Challenge sent to "+x.username+"!","success");
 };
 
-/* PRIZE: demo result only; owner manually supplies the real prize */
-document.getElementById("prizeBtn").onclick=()=>{
-  const b=document.getElementById("prizeBox");
-  if(b)b.classList.toggle("hidden");
+/* PRIZE — fixed: player must actually have 75,000+ cash */
+const MIN_PRIZE_BALANCE = 75000;
+const MIN_PRIZE_RISK = 75000;
+
+document.getElementById("prizeBtn").onclick=function(){
+  const x=u(), box=document.getElementById("prizeBox"), content=document.getElementById("prizeContent");
+  if(!x||!box||!content)return;
+  const balance=Math.floor(Number(x.cash)||0);
+  if(balance<MIN_PRIZE_BALANCE){
+    box.classList.remove("hidden");
+    content.innerHTML='<div style="text-align:center"><b style="font-size:24px">🔒 KEEP SAVING</b><p>You need at least <b>75,000 coins</b> in your cash balance to spin.</p><p>Your balance: <b>'+money(balance)+'</b></p><p class="muted">Keep earning and saving. Try again when you reach 75,000!</p></div>';
+    return;
+  }
+  box.classList.toggle("hidden");
 };
-
-function rewardBox(){
-  return document.getElementById("prizeContent");
-}
-
-function rewardRisk(){
-  const el=document.getElementById("riskAmount");
-  return Math.floor(Number(el&&el.value||0));
-}
-
-function renderRewardChoices(){
-  const box=rewardBox();
-  if(!box)return;
-  box.innerHTML=
-    '<div class="prizeResult">'+
-    '<h3>🎁 CHOOSE REWARD</h3>'+
-    '<button class="btn" id="robuxChoice">💎 ROBUX</button>'+
-    '<button class="btn" id="accountChoice">👤 ROBLOX ACCOUNT</button>'+
-    '<button class="small" id="rewardClose">CLOSE</button>'+
-    '</div>';
-  document.getElementById("robuxChoice").onclick=()=>startReward("robux");
-  document.getElementById("accountChoice").onclick=()=>startReward("account");
-  document.getElementById("rewardClose").onclick=()=>{box.innerHTML="";};
-}
 
 document.getElementById("choosePrizeBtn").onclick=function(){
-  const x=u(), box=rewardBox(), risk=rewardRisk();
-  if(!x||!box)return;
+  const x=u(),risk=Math.floor(Number(document.getElementById("riskAmount").value));
+  const balance=Math.floor(Number(x&&x.cash)||0);
+  if(!x)return;
+  if(balance<MIN_PRIZE_BALANCE)return msg("prizeContent","You need at least 75,000 cash coins before you can spin.","error");
+  if(!Number.isFinite(risk)||risk<MIN_PRIZE_RISK)return msg("prizeContent","Enter at least 75,000 coins.","error");
+  if(risk>balance)return msg("prizeContent","You don't have enough cash. Your balance is "+money(balance)+".","error");
 
-  const balance=Number(x.cash||0);
-  if(!Number.isFinite(risk)||risk<75000){
-    box.innerHTML='<div class="prizeResult"><b>Minimum risk is 75,000 coins.</b><p>Your balance is: '+balance.toLocaleString()+' coins</p></div>';
-    return;
-  }
-  if(risk>balance){
-    box.innerHTML='<div class="prizeResult"><b>Not enough coins.</b><p>Your balance is: '+balance.toLocaleString()+' coins</p></div>';
-    return;
-  }
-
-  // Confirmation stays in the SAME box.
-  box.innerHTML=
-    '<div class="prizeResult">'+
-    '<h3>⚠️ ARE YOU SURE?</h3>'+
-    '<p>You are risking <b>'+risk.toLocaleString()+' coins</b>.</p>'+
-    '<p>Your balance: <b>'+balance.toLocaleString()+' coins</b></p>'+
-    '<button class="btn" id="confirmReward">YES, CONTINUE</button>'+
-    '<button class="small" id="cancelReward">CANCEL</button>'+
-    '</div>';
-
-  document.getElementById("cancelReward").onclick=()=>{box.innerHTML="";};
-  document.getElementById("confirmReward").onclick=renderRewardChoices;
+  showLoading(700,()=>{
+    document.getElementById("prizeContent").innerHTML='<div class="choice"><button id="robuxChoice" class="btn">💎 ROBUX</button><button id="accountChoice" class="btn">👤 ROBLOX ACCOUNT</button></div>';
+    document.getElementById("robuxChoice").onclick=()=>showLoading(500,()=>resolvePrize("robux",risk));
+    document.getElementById("accountChoice").onclick=()=>showLoading(500,()=>resolvePrize("account",risk));
+  });
 };
 
-function startReward(type){
-  const x=u(),box=rewardBox(),risk=rewardRisk();
-  if(!x||!box)return;
+function resolvePrize(type,risk){
+  const x=u(), balance=Math.floor(Number(x&&x.cash)||0);
+  if(!x||balance<MIN_PRIZE_BALANCE||risk<MIN_PRIZE_RISK||risk>balance)return;
 
-  const balance=Number(x.cash||0);
-  if(!Number.isFinite(risk)||risk<75000||risk>balance){
-    box.innerHTML='<div class="prizeResult"><b>Invalid risk.</b><p>Your balance is: '+balance.toLocaleString()+' coins</p></div>';
-    return;
-  }
-
-  // Deduct exactly once, after reward type is selected.
+  /* Risk comes from CASH only, so players must actually save 75k cash. */
   x.cash=balance-risk;
-  saveUsers();
-  update();
+  saveUsers();update();
+
+  const box=document.getElementById("prizeContent");
 
   if(type==="robux"){
-    runRobuxSpin(x,risk,box);
+    box.innerHTML='<div style="text-align:center"><b style="font-size:28px">💎 ROBUX</b><div id="robuxRoll" style="font-size:34px;font-weight:900;margin:18px 0">💎 1 ROBUX</div><p class="muted">Spinning...</p></div>';
+
+    const timer=setInterval(()=>{
+      const el=document.getElementById("robuxRoll");
+      if(!el)return;
+      const n=Math.floor(Math.random()*10000)+1;
+      el.textContent="💎 "+n.toLocaleString()+" ROBUX";
+    },100);
+
+    setTimeout(()=>{
+      clearInterval(timer);
+      const result=Math.floor(Math.random()*10001);
+      const current=Math.floor(Number(u().cash)||0);
+
+      if(result===0){
+        box.innerHTML='<div style="text-align:center"><b style="font-size:28px">💎 0 ROBUX</b><p><b>Description:</b> Try again next time.</p><p>Your balance: <b>'+money(current)+'</b></p><button id="discordPrize" class="btn" style="width:100%">💬 Contact Owner on Discord</button></div>';
+      }else{
+        box.innerHTML='<div style="text-align:center"><b style="font-size:28px">💎 '+result.toLocaleString()+' ROBUX</b><p class="muted">Contact Zeenko to claim the prize.</p><button id="discordPrize" class="btn" style="width:100%">💬 Contact Owner on Discord</button></div>';
+      }
+      document.getElementById("discordPrize").onclick=()=>window.open("https://discord.gg/PAx6XE8g2y","_blank");
+    },2500);
+
   }else{
-    runAccountSpin(x,risk,box);
+    box.innerHTML='<div style="text-align:center"><b style="font-size:28px">👤 ROBLOX ACCOUNT</b><div id="accountRoll" style="font-size:25px;font-weight:900;margin:18px 0">BAD ACCOUNT</div><p class="muted">Spinning...</p></div>';
+
+    const tiers=["BAD ACCOUNT","GOOD ACCOUNT","VERY GOOD ACCOUNT"];
+    let i=0;
+    const roll=setInterval(()=>{
+      const el=document.getElementById("accountRoll");
+      if(el)el.textContent=tiers[i++%tiers.length];
+    },180);
+
+    setTimeout(()=>{
+      clearInterval(roll);
+      const r=Math.random();
+      const final=r<0.20?"VERY GOOD ACCOUNT":r<0.60?"GOOD ACCOUNT":"BAD ACCOUNT";
+      const el=document.getElementById("accountRoll");
+      if(el)el.textContent="🏆 "+final;
+      box.innerHTML+='<button id="discordPrize" class="btn" style="width:100%;margin-top:10px">💬 Contact Owner on Discord</button><p class="muted" style="text-align:center">Zeenko will manually handle the real prize.</p>';
+      document.getElementById("discordPrize").onclick=()=>window.open("https://discord.gg/PAx6XE8g2y","_blank");
+    },2500);
   }
 }
 
-function runRobuxSpin(x,risk,box){
-  box.innerHTML=
-    '<div class="prizeResult">'+
-    '<h3>💎 ROBUX</h3>'+
-    '<div id="robuxSpin" style="font-size:38px;font-weight:900;text-align:center;margin:18px 0">0</div>'+
-    '<p>Risked: <b>'+risk.toLocaleString()+' coins</b></p>'+
-    '<p>Spinning...</p>'+
-    '</div>';
+/* SEARCH + PROFILE — fixed */
+document.getElementById("search").oninput=renderSearch;
 
-  let last=0;
-  const timer=setInterval(()=>{
-    const el=document.getElementById("robuxSpin");
-    if(!el)return;
-    const max=risk<150000?100:10000;
-    last=Math.floor(Math.random()*(max+1));
-    el.textContent="💎 "+last.toLocaleString()+" ROBUX";
-  },80);
+function renderSearch(){
+  const input=document.getElementById("search");
+  const box=document.getElementById("searchResults");
+  if(!input||!box)return;
 
-  setTimeout(()=>{
-    clearInterval(timer);
-
-    let reward;
-    if(risk<150000){
-      reward=Math.floor(Math.random()*101);
-    }else{
-      const capped=Math.min(risk,10000000);
-      const ratio=(capped-150000)/(10000000-150000);
-      const maxReward=Math.max(1,Math.floor(1+ratio*9999));
-      reward=Math.min(10000,1+Math.floor(Math.random()*maxReward));
-    }
-
-    const balanceNow=Number(x.cash||0);
-
-    if(reward===0){
-      box.innerHTML=
-        '<div class="prizeResult">'+
-        '<h3>💎 ROBUX</h3>'+
-        '<div style="font-size:30px;font-weight:900">UNAVAILABLE</div>'+
-        '<p>Your balance is: <b>'+balanceNow.toLocaleString()+' coins</b></p>'+
-        '<button class="small" id="rewardClose">CLOSE</button>'+
-        '</div>';
-    }else{
-      showRewardResult("ROBUX",reward+" ROBUX",risk,balanceNow,box);
-    }
-  },2500);
-}
-
-function runAccountSpin(x,risk,box){
-  const tiers=["BAD ACCOUNT","GOOD ACCOUNT","VERY GOOD ACCOUNT"];
-
-  box.innerHTML=
-    '<div class="prizeResult">'+
-    '<h3>👤 ROBLOX ACCOUNT</h3>'+
-    '<div id="accountSpin" style="font-size:30px;font-weight:900;text-align:center;margin:18px 0">BAD ACCOUNT</div>'+
-    '<p>Risked: <b>'+risk.toLocaleString()+' coins</b></p>'+
-    '<p>Spinning...</p>'+
-    '</div>';
-
-  let i=0;
-  const timer=setInterval(()=>{
-    const el=document.getElementById("accountSpin");
-    if(el)el.textContent=tiers[i++%tiers.length];
-  },180);
-
-  setTimeout(()=>{
-    clearInterval(timer);
-
-    const r=Math.random();
-    const result=risk>=5000000
-      ?(r<.20?"VERY GOOD ACCOUNT":r<.70?"GOOD ACCOUNT":"BAD ACCOUNT")
-      :risk>=1000000
-        ?(r<.12?"VERY GOOD ACCOUNT":r<.60?"GOOD ACCOUNT":"BAD ACCOUNT")
-        :(r<.07?"VERY GOOD ACCOUNT":r<.52?"GOOD ACCOUNT":"BAD ACCOUNT");
-
-    showRewardResult("ROBLOX ACCOUNT",result,risk,Number(x.cash||0),box);
-  },2500);
-}
-
-function showRewardResult(type,result,risk,balance,box){
-  box.innerHTML=
-    '<div class="prizeResult">'+
-    '<h3>🎉 '+type+'</h3>'+
-    '<div style="font-size:30px;font-weight:900;margin:15px 0">'+result+'</div>'+
-    '<p>Risked: <b>'+risk.toLocaleString()+' coins</b></p>'+
-    '<p>Your balance is: <b>'+balance.toLocaleString()+' coins</b></p>'+
-    '<p>Go to our Discord server to claim your reward.</p>'+
-    '<button class="btn" id="claimCodes">CLAIM CODES</button>'+
-    '<button class="btn" id="joinDiscord">JOIN TO DISCORD</button>'+
-    '<button class="small" id="rewardClose">CLOSE</button>'+
-    '</div>';
-
-  document.getElementById("joinDiscord").onclick=()=>{
-    window.open("https://discord.gg/TGDvzbPfXC","_blank","noopener,noreferrer");
-  };
-
-  document.getElementById("claimCodes").onclick=()=>{
-    const code=Math.random().toString(36).slice(2,6).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase();
-    box.innerHTML=
-      '<div class="prizeResult">'+
-      '<h3>🎁 CLAIM CODE</h3>'+
-      '<p>'+type+': <b>'+result+'</b></p>'+
-      '<div style="font-size:22px;font-weight:900;letter-spacing:2px;margin:14px 0">'+code+'</div>'+
-      '<button class="btn" id="copyCode">COPY CODE</button>'+
-      '<button class="btn" id="joinDiscord">JOIN TO DISCORD</button>'+
-      '<button class="small" id="rewardClose">CLOSE</button>'+
-      '</div>';
-
-    document.getElementById("copyCode").onclick=async()=>{
-      try{
-        await navigator.clipboard.writeText(code);
-        document.getElementById("copyCode").textContent="✅ COPIED";
-      }catch(e){alert("Claim code: "+code);}
-    };
-    document.getElementById("joinDiscord").onclick=()=>window.open("https://discord.gg/TGDvzbPfXC","_blank","noopener,noreferrer");
-    document.getElementById("rewardClose").onclick=()=>{box.innerHTML="";};
-  };
-
-  document.getElementById("rewardClose").onclick=()=>{box.innerHTML="";};
-}
-
-function restoreSession(){
   loadUsers();
-  const k=getSession();
-  if(!k||!users[k])return;
-  const x=users[k];
-  normalizeUserData(x);
-  if(x.banned || Number(x.suspendedUntil||0)>Date.now()){
-    currentUser=null;
-    saveSession();
+  Object.values(users).forEach(normalizeUserData);
+
+  const q=key(input.value);
+  if(!q){
+    box.innerHTML="";
     return;
   }
-  currentUser=k;
-  openGame();
+
+  const list=Object.values(users)
+    .filter(x=>x && !x.banned && key(x.username).includes(q))
+    .sort((a,b)=>key(a.username).localeCompare(key(b.username)))
+    .slice(0,20);
+
+  if(!list.length){
+    box.innerHTML='<div class="details">Player not found.</div>';
+    return;
+  }
+
+  box.innerHTML=list.map(x=>{
+    const safe=esc(x.username);
+    return '<div class="search-card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border-top:1px solid #293750">'+
+      '<div class="player">'+
+        '<div class="player-avatar">'+(x.avatar?'<img src="'+x.avatar+'" alt="PFP">':"👤")+'</div>'+
+        '<div><div class="player-name">'+safe+'</div>'+
+        '<div class="details">'+esc(x.bio||"No bio")+' • '+esc(x.country||"🌎 No country")+'</div>'+
+        '<div class="details">👍 '+Number(x.likes||0)+' • 👎 '+Number(x.dislikes||0)+'</div></div>'+
+      '</div>'+
+      '<button type="button" class="btn" data-profile="'+safe+'">Go to Profile</button>'+
+    '</div>';
+  }).join("");
+
+  box.querySelectorAll("[data-profile]").forEach(b=>{
+    b.onclick=()=>openViewProfile(b.getAttribute("data-profile"));
+  });
 }
-window.addEventListener("DOMContentLoaded",restoreSession);
-</script>
 
-<div id="loadingOverlay" class="modal hidden">
-  <div class="modal-box" style="text-align:center;max-width:300px">
-    <div style="font-size:30px;font-weight:900">Loading<span id="loadDots">.</span></div>
-    <div class="muted" style="margin-top:8px">Please wait...</div>
-  </div>
-</div>
+function openViewProfile(name){
+  loadUsers();
+  const x=users[key(name)];
+  if(!x)return msg("challengeMsg","Player not found.","error");
+
+  viewedPlayer=key(name);
+
+  setAvatar(document.getElementById("viewAvatar"),x.avatar);
+  document.getElementById("viewName").textContent=x.username;
+  document.getElementById("viewBio").textContent=x.bio||"No bio";
+  document.getElementById("viewCountry").textContent=x.country||"";
+  document.getElementById("viewBalance").textContent="Balance: "+money(x.cash);
+  document.getElementById("viewBank").textContent="Bank: "+money(x.bank);
+  document.getElementById("likes").textContent=Number(x.likes||0);
+  document.getElementById("dislikes").textContent=Number(x.dislikes||0);
+
+  const meKey=currentUser||"";
+  const voteKey="injuriesx2_votes_v1";
+  let votes={};
+  try{votes=JSON.parse(localStorage.getItem(voteKey)||"{}")}catch(e){votes={}}
+  const mine=votes[meKey+"::"+key(name)]||"";
+
+  const likeBtn=document.getElementById("likeBtn");
+  const dislikeBtn=document.getElementById("dislikeBtn");
+  if(likeBtn){likeBtn.style.opacity=mine==="like"?"1":"0.85";likeBtn.style.pointerEvents="auto";}
+  if(dislikeBtn){dislikeBtn.style.opacity=mine==="dislike"?"1":"0.85";dislikeBtn.style.pointerEvents="auto";}
+  const voteMsg=document.getElementById("voteMsg");
+  if(voteMsg)voteMsg.textContent="";
+
+  document.getElementById("viewProfileModal").classList.remove("hidden");
+}
+
+document.getElementById("closeViewProfile").onclick=()=>{
+  document.getElementById("viewProfileModal").classList.add("hidden");
+};
+
+function votePlayer(type){
+  if(type!=="like" && type!=="dislike")return;
+  if(!viewedPlayer || !currentUser)return;
+
+  loadUsers();
+  const me=key(currentUser);
+  const targetKey=key(viewedPlayer);
+  const target=users[targetKey];
+  if(!target)return;
+
+  if(me===targetKey){
+    return msg("voteMsg","You cannot like or dislike your own profile.","error");
+  }
+
+  const voteKey="injuriesx2_votes_v1";
+  let votes={};
+  try{votes=JSON.parse(localStorage.getItem(voteKey)||"{}")}catch(e){votes={}}
+
+  const id=me+"::"+targetKey;
+  const old=votes[id]||"";
+  let likes=Math.max(0,Math.floor(Number(target.likes)||0));
+  let dislikes=Math.max(0,Math.floor(Number(target.dislikes)||0));
+
+  if(old===type){
+    if(type==="like")likes=Math.max(0,likes-1);
+    else dislikes=Math.max(0,dislikes-1);
+    delete votes[id];
+  }else{
+    if(old==="like")likes=Math.max(0,likes-1);
+    if(old==="dislike")dislikes=Math.max(0,dislikes-1);
+    if(type==="like")likes++;
+    else dislikes++;
+    votes[id]=type;
+  }
+
+  target.likes=likes;
+  target.dislikes=dislikes;
+  users[targetKey]=target;
+  localStorage.setItem(voteKey,JSON.stringify(votes));
+  if(!saveUsers())return msg("voteMsg","Could not save your vote.","error");
+
+  msg("voteMsg",type==="like"?"👍 Like saved.":"👎 Dislike saved.","success");
+
+  /* Immediately refresh the same player profile so the number changes on screen. */
+  openViewProfile(targetKey);
+  renderLeaderboard();
+  renderSearch();
+}
 
 
+document.getElementById("likeBtn").onclick=function(e){e.preventDefault();votePlayer("like")};
+document.getElementById("dislikeBtn").onclick=function(e){e.preventDefault();votePlayer("dislike")};
+document.getElementById("likeBtn").onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();votePlayer("like")}};
+document.getElementById("dislikeBtn").onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();votePlayer("dislike")}};
 
-<script id="cooldown-loading-fix">
-(function(){
- function dots(btn,duration){
-   if(!btn||btn.disabled)return;
-   const old=btn.innerHTML,frames=["..","...","....","...",".."];
-   let i=0;btn.disabled=true;btn.innerHTML=frames[0];
-   const timer=setInterval(()=>{i=(i+1)%frames.length;btn.innerHTML=frames[i]},130);
-   setTimeout(()=>{clearInterval(timer);btn.disabled=false;btn.innerHTML=old},duration);
- }
- const map=[
-   ["workBtn",650],["crimeBtn",650],["upBtn",650],["downBtn",650],
-   ["depositBtn",650],["withdrawBtn",650]
- ];
- map.forEach(([id,d])=>{
-   const b=document.getElementById(id);
-   if(!b||b.dataset.cooldownLoad==="1")return;
-   const old=b.onclick;
-   b.onclick=function(){dots(b,d); if(typeof old==="function")old.call(b)};
-   b.dataset.cooldownLoad="1";
- });
- document.querySelectorAll(".coinBtn").forEach(b=>{
-   if(b.dataset.cooldownLoad==="1")return;
-   const old=b.onclick;
-   b.onclick=function(){dots(b,650); if(typeof old==="function")old.call(b)};
-   b.dataset.cooldownLoad="1";
- });
-})();
-</script>
+/* LEADERBOARD — live from saved accounts */
+document.getElementById("refreshBtn").onclick=function(){
+  showLoading(650,()=>{
+    loadUsers();
+    const session=localStorage.getItem(SESSION_KEY);
+    if(session&&users[session])currentUser=session;
+    Object.values(users).forEach(normalizeUserData);
+    renderLeaderboard();
+    renderSearch();
+    if(typeof updateStaff==="function")updateStaff();
+    if(typeof renderSingleRolePanel==="function")renderSingleRolePanel();
+    update();
+    msg("challengeMsg","Leaderboard refreshed.","success");
+  });
+};
 
+function renderLeaderboard(){
+  const box=document.getElementById("leaderboard");
+  if(!box)return;
 
+  loadUsers();
+  Object.values(users).forEach(normalizeUserData);
 
+  const list=Object.values(users)
+    .filter(x=>x&&!x.banned)
+    .sort((a,b)=>(Number(b.cash||0)+Number(b.bank||0))-(Number(a.cash||0)+Number(a.bank||0)));
 
+  if(!list.length){
+    box.innerHTML='<div class="details">No players yet.</div>';
+    return;
+  }
 
+  box.innerHTML=list.map((x,i)=>{
+    const total=Number(x.cash||0)+Number(x.bank||0);
+    const roleIcon=key(x.username)===key(OWNER)?"👑":x.role==="moderator"?"🛡️":x.role==="staff"?"⭐":"";
 
+    return '<div class="row leaderboard-player">'+
+      '<div style="text-align:center;font-weight:bold">'+
+        (i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+
+      '</div>'+
+      '<div class="player">'+
+        '<div class="player-avatar">'+
+          (x.avatar?'<img src="'+x.avatar+'" alt="PFP">':"👤")+
+        '</div>'+
+        '<div class="player-name">'+
+          esc(x.username)+' '+roleIcon+
+        '</div>'+
+      '</div>'+
+      '<div class="total">'+money(total)+'</div>'+
+    '</div>';
+  }).join("");
+}
 
-
-
-
-
-<script id="single-panel-clean-js">
+/* ORIGINAL SINGLE ROLE PANEL */
 (function(){
 "use strict";
-
 function srpMe(){try{return typeof u==="function"?u():null}catch(e){return null}}
 function srpOwner(){const x=srpMe();return !!x && key(x.username)===key(OWNER)}
 function srpMod(){const x=srpMe();return !!x && x.role==="moderator" && Number(x.moderatorUntil||0)>Date.now()}
 function srpStaff(){const x=srpMe();return !!x && x.role==="staff"}
 function srpCan(){return srpOwner()||srpMod()||srpStaff()}
-function srpFind(name){
-  const k=key(name);
-  if(!k)return null;
-  return users[k] || Object.values(users).find(v=>v&&key(v.username)===k) || null;
-}
+function srpFind(name){const k=key(name);if(!k)return null;return users[k] || Object.values(users).find(v=>v&&key(v.username)===k) || null}
 function srpSave(){try{saveUsers();}catch(e){}}
 function srpForm(title,fields,action){
-  const panel=document.getElementById("singleRolePanel");
-  if(!panel)return;
-  const actions=panel.querySelector(".srp-actions");
-  const form=panel.querySelector(".srp-form");
-  const titleEl=panel.querySelector(".srp-title");
-  if(actions)actions.style.display="none";
-  if(form)form.classList.remove("hidden");
-  if(titleEl)titleEl.textContent=title;
-  if(!form)return;
-  form.innerHTML=fields+
-    '<div class="srp-row"><button class="btn" id="srpConfirm">Confirm</button><button class="small" id="srpClose">Close</button></div>';
-  form.querySelector("#srpClose").onclick=srpHome;
-  form.querySelector("#srpConfirm").onclick=function(){
-    if(this.dataset.second!=="1"){
-      this.dataset.second="1";this.textContent="Are you sure?";return;
-    }
-    action(form);
-  };
+ const panel=document.getElementById("singleRolePanel");if(!panel)return;
+ const actions=panel.querySelector(".srp-actions"),form=panel.querySelector(".srp-form"),titleEl=panel.querySelector(".srp-title");
+ if(actions)actions.style.display="none";if(form)form.classList.remove("hidden");if(titleEl)titleEl.textContent=title;if(!form)return;
+ form.innerHTML=fields+'<div class="srp-row"><button class="btn" id="srpConfirm">Confirm</button><button class="small" id="srpClose">Close</button></div>';
+ form.querySelector("#srpClose").onclick=srpHome;
+ form.querySelector("#srpConfirm").onclick=function(){if(this.dataset.second!=="1"){this.dataset.second="1";this.textContent="Are you sure?";return}action(form)};
 }
 function srpHome(){
-  const panel=document.getElementById("singleRolePanel");
-  if(!panel)return;
-  const actions=panel.querySelector(".srp-actions");
-  const form=panel.querySelector(".srp-form");
-  const title=panel.querySelector(".srp-title");
-  if(actions)actions.style.display="grid";
-  if(form){form.classList.add("hidden");form.innerHTML="";}
-  const x=srpMe();
-  if(title)title.textContent=srpOwner()?"👑 Owner — "+x.username:srpMod()?"🛡️ Moderator — "+x.username:"⭐ Staff — "+x.username;
+ const panel=document.getElementById("singleRolePanel");if(!panel)return;
+ const actions=panel.querySelector(".srp-actions"),form=panel.querySelector(".srp-form"),title=panel.querySelector(".srp-title");
+ if(actions)actions.style.display="grid";if(form){form.classList.add("hidden");form.innerHTML=""}
+ const x=srpMe();if(title)title.textContent=srpOwner()?"👑 Owner — "+x.username:srpMod()?"🛡️ Moderator — "+x.username:"⭐ Staff — "+x.username;
 }
 function f(id,placeholder,type="text"){return '<input id="'+id+'" placeholder="'+placeholder+'" type="'+type+'">'}
 function target(form){return srpFind(form.querySelector("#srpUser").value)}
-
-function ban(){
- srpForm("BAN PLAYER",f("srpUser","User?")+f("srpReason","Reason"),form=>{
-   const t=target(form);if(!t)return alert("Player not found.");
-   if(!srpOwner()&&key(t.username)===key(OWNER))return alert("Owner cannot be banned.");
-   t.banned=true;t.banReason=form.querySelector("#srpReason").value.trim()||"Rule violation";
-   t.cash=0;t.bank=0;t.coins=0;t.role="player";t.moderatorUntil=0;
-   srpSave();srpHome();update();
- });
-}
-function suspend(){
- srpForm("SUSPEND PLAYER",
-   f("srpUser","User?")+
-   '<select id="srpDays"><option value="1">1 day</option><option value="2">2 days</option><option value="3">3 days</option><option value="7">7 days</option></select>'+
-   f("srpReason","Reason?"),
-   form=>{
-     const t=target(form);if(!t)return alert("Player not found.");
-     if(Number(t.suspendedUntil||0)>Date.now())return alert("Player is already suspended.");
-     const reason=form.querySelector("#srpReason").value.trim()||"Rule violation";
-     t.suspendedUntil=Date.now()+Number(form.querySelector("#srpDays").value)*86400000;
-     t.suspendReason=reason;
-     if(/bad|abuse|farming|misuse/i.test(reason)){t.role="player";t.moderatorUntil=0}
-     srpSave();srpHome();update();
-   });
-}
-function give(){
- srpForm("GIVE PLAYER COINS",f("srpUser","User?")+f("srpAmount","Amount","number"),form=>{
-   const t=target(form),a=Math.floor(Number(form.querySelector("#srpAmount").value));
-   if(!t)return alert("Player not found.");
-   if(!Number.isFinite(a)||a<1)return alert("Invalid amount.");
-   if(!srpOwner()&&a>50000)return alert("Moderator limit is 50,000 coins.");
-   t.cash=Number(t.cash||0)+a;t.coins=Number(t.coins||0)+a;
-   srpSave();srpHome();update();
- });
-}
-function hire(role){
- srpForm(role==="moderator"?"MODERATE PLAYER":"STAFF PLAYER",f("srpUser","User?"),form=>{
-   const t=target(form);if(!t)return alert("Player not found.");
-   if(role==="moderator"){t.role="moderator";t.moderatorUntil=Date.now()+3*60*60*1000}
-   else {t.role="staff";t.moderatorUntil=0}
-   srpSave();srpHome();update();
- });
-}
-function simple(title,kind){
- srpForm(title,f("srpUser","User?"),form=>{
-   const t=target(form);if(!t)return alert("Player not found.");
-   if(kind==="unban"){t.banned=false;t.banReason=""}
-   if(kind==="unsuspend"){t.suspendedUntil=0;t.suspendReason=""}
-   if(kind==="unmod"){t.role="player";t.moderatorUntil=0}
-   if(kind==="unstaff"){t.role="player";t.moderatorUntil=0}
-   srpSave();srpHome();update();
- });
-}
-
+function ban(){srpForm("BAN PLAYER",f("srpUser","User?")+f("srpReason","Reason"),form=>{const t=target(form);if(!t)return alert("Player not found.");if(!srpOwner()&&key(t.username)===key(OWNER))return alert("Owner cannot be banned.");t.banned=true;t.banReason=form.querySelector("#srpReason").value.trim()||"Rule violation";t.cash=0;t.bank=0;t.coins=0;t.role="player";t.moderatorUntil=0;srpSave();srpHome();update()})}
+function suspend(){srpForm("SUSPEND PLAYER",f("srpUser","User?")+'<select id="srpDays"><option value="1">1 day</option><option value="2">2 days</option><option value="3">3 days</option><option value="7">7 days</option></select>'+f("srpReason","Reason?"),form=>{const t=target(form);if(!t)return alert("Player not found.");if(Number(t.suspendedUntil||0)>Date.now())return alert("Player is already suspended.");const reason=form.querySelector("#srpReason").value.trim()||"Rule violation";t.suspendedUntil=Date.now()+Number(form.querySelector("#srpDays").value)*86400000;t.suspendReason=reason;if(/bad|abuse|farming|misuse/i.test(reason)){t.role="player";t.moderatorUntil=0}srpSave();srpHome();update()})}
+function give(){srpForm("GIVE PLAYER COINS",f("srpUser","User?")+f("srpAmount","Amount","number"),form=>{const t=target(form),a=Math.floor(Number(form.querySelector("#srpAmount").value));if(!t)return alert("Player not found.");if(!Number.isFinite(a)||a<1)return alert("Invalid amount.");if(!srpOwner()&&a>50000)return alert("Moderator limit is 50,000 coins.");t.cash=Number(t.cash||0)+a;t.coins=Number(t.coins||0)+a;srpSave();srpHome();update()})}
+function hire(role){srpForm(role==="moderator"?"MODERATE PLAYER":"STAFF PLAYER",f("srpUser","User?"),form=>{const t=target(form);if(!t)return alert("Player not found.");if(role==="moderator"){t.role="moderator";t.moderatorUntil=Date.now()+3*60*60*1000}else{t.role="staff";t.moderatorUntil=0}srpSave();srpHome();update()})}
+function simple(title,kind){srpForm(title,f("srpUser","User?"),form=>{const t=target(form);if(!t)return alert("Player not found.");if(kind==="unban"){t.banned=false;t.banReason=""}if(kind==="unsuspend"){t.suspendedUntil=0;t.suspendReason=""}if(kind==="unmod"){t.role="player";t.moderatorUntil=0}if(kind==="unstaff"){t.role="player";t.moderatorUntil=0}srpSave();srpHome();update()})}
 window.renderSingleRolePanel=function(){
-  const old=document.getElementById("singleRolePanel");
-  if(old)old.remove();
+ const old=document.getElementById("singleRolePanel");if(old)old.remove();const me=srpMe();if(!me||!srpCan())return;
+ const leaderboardCard=document.getElementById("leaderboard")?.closest(".card");if(!leaderboardCard||!leaderboardCard.parentElement)return;
+ const panel=document.createElement("section");panel.id="singleRolePanel";panel.innerHTML='<div class="srp-title"></div><div class="srp-actions"></div><div class="srp-form hidden"></div>';
+ leaderboardCard.parentElement.insertBefore(panel,leaderboardCard.nextSibling);
+ const title=panel.querySelector(".srp-title"),grid=panel.querySelector(".srp-actions");
+ title.textContent=srpOwner()?"👑 Owner — "+me.username:srpMod()?"🛡️ Moderator — "+me.username:"⭐ Staff — "+me.username;
+ const add=(label,fn)=>{const b=document.createElement("button");b.className="btn";b.textContent=label;b.onclick=fn;grid.appendChild(b)};
+ if(srpOwner()){add("Ban People",ban);add("Moderate Player",()=>hire("moderator"));add("Staff Player",()=>hire("staff"));add("Suspend Player",suspend);add("Give Coins",give);add("Unban People",()=>simple("UNBAN PLAYER","unban"));add("Unsuspend Player",()=>simple("UNSUSPEND PLAYER","unsuspend"));add("Unmoderator People",()=>simple("UNMODERATOR PLAYER","unmod"));add("Unstaff People",()=>simple("UNSTAFF PLAYER","unstaff"))}
+ else if(srpMod()){add("Ban Player",ban);add("Suspend Player",suspend);add("Give Coins",give)}
+ else{add("Suspend Player",suspend);add("Unsuspend Player",()=>simple("UNSUSPEND PLAYER","unsuspend"))}
+};
+function srpInit(){if(typeof loadUsers==="function")loadUsers();renderSingleRolePanel()}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(srpInit,250));else setTimeout(srpInit,250);
+setInterval(()=>{const panel=document.getElementById("singleRolePanel"),form=panel?.querySelector(".srp-form");if(!panel)renderSingleRolePanel()},2000);
+})();
 
-  const me=srpMe();
-  if(!me || !srpCan())return;
 
-  const leaderboardCard=document.getElementById("leaderboard")?.closest(".card");
-  if(!leaderboardCard || !leaderboardCard.parentElement)return;
+document.getElementById("profileBtn").onclick=function(){
+  const x=u();
+  if(!x)return;
 
-  const panel=document.createElement("section");
-  panel.id="singleRolePanel";
-  panel.innerHTML='<div class="srp-title"></div><div class="srp-actions"></div><div class="srp-form hidden"></div>';
+  document.getElementById("newUsername").value=x.username||"";
+  document.getElementById("bio").value=x.bio||"";
+  document.getElementById("country").value=x.country||"";
+  selectedPFP=x.avatar||"";
 
-  /* CRITICAL: sibling of leaderboard card, not child of leaderboard. */
-  leaderboardCard.parentElement.insertBefore(panel,leaderboardCard.nextSibling);
-
-  const title=panel.querySelector(".srp-title");
-  const grid=panel.querySelector(".srp-actions");
-  title.textContent=srpOwner()?"👑 Owner — "+me.username:srpMod()?"🛡️ Moderator — "+me.username:"⭐ Staff — "+me.username;
-
-  const add=(label,fn)=>{const b=document.createElement("button");b.className="btn";b.textContent=label;b.onclick=fn;grid.appendChild(b)}
-
-  if(srpOwner()){
-    add("Ban People",ban);
-    add("Moderate Player",()=>hire("moderator"));
-    add("Staff Player",()=>hire("staff"));
-    add("Suspend Player",suspend);
-    add("Give Coins",give);
-    add("Unban People",()=>simple("UNBAN PLAYER","unban"));
-    add("Unsuspend Player",()=>simple("UNSUSPEND PLAYER","unsuspend"));
-    add("Unmoderator People",()=>simple("UNMODERATOR PLAYER","unmod"));
-    add("Unstaff People",()=>simple("UNSTAFF PLAYER","unstaff"));
-  }else if(srpMod()){
-    add("Ban Player",ban);add("Suspend Player",suspend);add("Give Coins",give);
+  const p=document.getElementById("preview");
+  if(selectedPFP){
+    p.src=selectedPFP;
+    p.style.display="block";
   }else{
-    add("Suspend Player",suspend);
-    add("Unsuspend Player",()=>simple("UNSUSPEND PLAYER","unsuspend"));
+    p.removeAttribute("src");
+    p.style.display="none";
   }
+
+  const left=(x.lastUsernameChange||0)+USERNAME_COOLDOWN-Date.now();
+  const nameInput=document.getElementById("newUsername");
+  nameInput.disabled=left>0;
+
+  const msgEl=document.getElementById("profileMsg");
+  msgEl.textContent=left>0?"Username locked for "+Math.ceil(left/86400000)+" day(s).":"Username available.";
+  msgEl.className="message muted";
+
+  document.getElementById("pfpInput").value="";
+  document.getElementById("profileModal").classList.remove("hidden");
 };
 
-function srpInit(){
-  if(typeof loadUsers==="function")loadUsers();
-  renderSingleRolePanel();
-}
-if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(srpInit,250));
-else setTimeout(srpInit,250);
+document.getElementById("closeProfileBtn").onclick=()=>{
+  document.getElementById("profileModal").classList.add("hidden");
+};
 
-/* Re-render only when no form is open. This prevents the panel from glitching/vanishing. */
-setInterval(()=>{
-  const panel=document.getElementById("singleRolePanel");
-  const form=panel?.querySelector(".srp-form");
-  if(!panel)renderSingleRolePanel();
-  else if(form?.classList.contains("hidden")){}
-},2000);
+document.getElementById("pfpInput").onchange=function(){
+  const f=this.files&&this.files[0];
+  if(!f)return;
+
+  if(!/^image\/(png|jpeg|webp)$/.test(f.type))
+    return msg("profileMsg","Choose a PNG, JPG or WEBP image.","error");
+
+  if(f.size>5*1024*1024)
+    return msg("profileMsg","Image must be under 5MB.","error");
+
+  const r=new FileReader();
+
+  r.onload=()=>{
+    const im=new Image();
+
+    im.onload=()=>{
+      const c=document.createElement("canvas");
+      const max=512;
+      const scale=Math.min(1,max/Math.max(im.width,im.height));
+
+      c.width=Math.max(1,Math.round(im.width*scale));
+      c.height=Math.max(1,Math.round(im.height*scale));
+
+      const ctx=c.getContext("2d");
+      ctx.drawImage(im,0,0,c.width,c.height);
+
+      selectedPFP=c.toDataURL("image/jpeg",0.82);
+
+      const p=document.getElementById("preview");
+      p.src=selectedPFP;
+      p.style.display="block";
+
+      msg("profileMsg","Profile picture ready. Press Save to apply.","success");
+    };
+
+    im.onerror=()=>{
+      msg("profileMsg","Could not read that image.","error");
+    };
+
+    im.src=r.result;
+  };
+
+  r.onerror=()=>{
+    msg("profileMsg","Could not read the selected file.","error");
+  };
+
+  r.readAsDataURL(f);
+};
+
+document.getElementById("saveProfileBtn").onclick=function(){
+  const x=u();
+  if(!x)return;
+
+  const newName=norm(document.getElementById("newUsername").value);
+  const oldKey=currentUser;
+  const newKey=key(newName);
+
+  if(!validName(newName))
+    return msg("profileMsg","Username must be 1–50 letters, numbers or _.","error");
+
+  if(newKey!==oldKey){
+    if(x.lastUsernameChange&&Date.now()-x.lastUsernameChange<USERNAME_COOLDOWN)
+      return msg("profileMsg","Username can only be changed every 3 days.","error");
+
+    if(users[newKey])
+      return msg("profileMsg","That username is already taken.","error");
+  }
+
+  x.bio=String(document.getElementById("bio").value||"").trim().slice(0,100);
+  x.country=document.getElementById("country").value||"";
+
+  if(selectedPFP)
+    x.avatar=selectedPFP;
+
+  if(newKey!==oldKey){
+    delete users[oldKey];
+    x.username=newName;
+    x.lastUsernameChange=Date.now();
+    users[newKey]=x;
+    currentUser=newKey;
+    localStorage.setItem(SESSION_KEY,currentUser);
+  }
+
+  normalizeUserData(x);
+
+  if(!saveUsers())
+    return msg("profileMsg","Could not save profile.","error");
+
+  document.getElementById("profileModal").classList.add("hidden");
+  update();
+  renderLeaderboard();
+  renderSearch();
+};
+
+/* UNIVERSAL BUTTON LOADING */
+(function(){
+  const skip=new Set([
+    "closeProfileBtn","closeViewProfile","logoutBtn","forgotCloseBtn","likeBtn","dislikeBtn"
+  ]);
+
+  document.addEventListener("click",function(e){
+    const btn=e.target.closest("button");
+    if(!btn||skip.has(btn.id)||btn.disabled)return;
+    if(btn.dataset.autoLoading==="1")return;
+
+    const old=btn.innerHTML;
+    btn.dataset.autoLoading="1";
+    btn.disabled=true;
+
+    const frames=[".","..","...","....","...",".."];
+    let i=0;
+    btn.innerHTML=frames[0];
+
+    const timer=setInterval(()=>{
+      i=(i+1)%frames.length;
+      if(document.body.contains(btn))btn.innerHTML=frames[i];
+    },160);
+
+    setTimeout(()=>{
+      clearInterval(timer);
+      if(document.body.contains(btn)){
+        btn.disabled=false;
+        btn.innerHTML=old;
+        delete btn.dataset.autoLoading;
+      }
+    },850);
+  },true);
 })();
+
+/* ROLE PANEL VISIBILITY FIX
+   Normal players must never see Owner/Moderator/Staff controls.
+   The existing panel contents and permissions are untouched.
+*/
+function refreshRolePanelVisibility(){
+  const x=u();
+  const role=x ? String(x.role||"player").toLowerCase() : "player";
+  const owner=!!x && (role==="owner" || key(x.username)===key(OWNER));
+  const moderator=owner || (!!x && role==="moderator" && Number(x.moderatorUntil||0)>Date.now());
+  const staff=moderator || (!!x && role==="staff");
+
+  /* Existing original panel only: do not modify its controls or content. */
+  const panel=document.getElementById("staffPanel");
+  if(panel)panel.classList.toggle("hidden",!staff);
+
+  /* The generated single role panel is also role-gated, but its internals are untouched. */
+  const single=document.getElementById("singleRolePanel");
+  if(single)single.classList.toggle("hidden",!staff);
+}
+
+/* Run after every normal UI refresh. */
+const _originalUpdate=window.update;
+if(typeof _originalUpdate==="function"){
+  window.update=function(){
+    const r=_originalUpdate.apply(this,arguments);
+    refreshRolePanelVisibility();
+    return r;
+  };
+}
+
+function normalizeUserData(x){
+ x.cash=Math.max(0,Math.floor(Number(x.cash)||0));
+ x.bank=Math.max(0,Math.floor(Number(x.bank)||0));
+ x.likes=Math.max(0,Math.floor(Number(x.likes)||0));
+ x.dislikes=Math.max(0,Math.floor(Number(x.dislikes)||0));
+ x.role=x.role||"player";
+ x.bio=String(x.bio||"");
+ x.country=String(x.country||"");
+ x.avatar=String(x.avatar||"");
+ return x;
+}
+function persistAndRefresh(){
+ Object.values(users).forEach(normalizeUserData);
+ const ok=saveUsers();
+ if(!ok) console.warn("localStorage save failed");
+ update();
+ return ok;
+}
+
+/* START */
+loadUsers();
+Object.values(users).forEach(normalizeUserData);
+saveUsers();
+const session=localStorage.getItem(SESSION_KEY);
+if(session&&users[session]&&!users[session].banned&&Number(users[session].suspendedUntil||0)<=Date.now()){currentUser=session;openGame()}
+else if(session){localStorage.removeItem(SESSION_KEY)}
+setTimeout(()=>{renderLeaderboard();renderSearch();refreshRolePanelVisibility()},0);
+setInterval(()=>{if(currentUser&&users[currentUser])saveUsers()},5000);
+window.addEventListener("beforeunload",()=>{if(currentUser)saveUsers()});
 </script>
+
+<div id="loadingOverlay" class="modal hidden">
+  <div class="modal-box" style="text-align:center;max-width:300px">
+    <div style="font-size:28px;font-weight:900">Loading<span id="loadDots">.</span></div>
+    <div class="muted" style="margin-top:8px">Please wait...</div>
+  </div>
+</div>
 </body>
-                                                                                                                                 </html>
+</html>
+
