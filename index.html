@@ -103,22 +103,95 @@ textarea{resize:vertical;min-height:80px}
 @media(max-width:650px){#singleRolePanel .srp-actions{grid-template-columns:1fr 1fr}}
 </style>
 
-<style id="refresh-location-fix">
-.refresh-under-challenge #refreshBtn{
-  width:100%!important;
-  margin:0!important;
+<style id="leaderboard-amount-layout-fix">
+.leaderboard-player{
+  grid-template-columns:42px minmax(0,1fr) 92px!important;
+  column-gap:10px!important;
+}
+.leaderboard-player .player{
+  min-width:0!important;
+  overflow:hidden!important;
+}
+.leaderboard-player .player-name{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.leaderboard-player .leaderboard-amount{
+  width:92px!important;
+  min-width:92px!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  font-variant-numeric:tabular-nums!important;
+  font-weight:900!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+</style>
+<style id="persistent-role-panel-style">
+#singleRolePanel{margin:16px 0;padding:16px;border-radius:14px}
+#singleRolePanel .srp-title{font-weight:900;margin-bottom:12px}
+#singleRolePanel .srp-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px}
+#singleRolePanel .srp-form.hidden{display:none}
+#singleRolePanel .srp-form input,#singleRolePanel .srp-form select{width:100%;box-sizing:border-box;margin:5px 0}
+#singleRolePanel .srp-row{display:flex;gap:8px;margin-top:8px}
+#singleRolePanel .srp-row button{flex:1}
+</style><style id="invalid-account-style">#invalidAccountModal .modal-box{border:1px solid #ef4444}#invalidAccountModal h3{color:#ff5b5b}</style>
+<style id="panel-success-error-style">
+#singleRolePanel .srp-message{
+  font-size:12px!important;
+  text-align:center!important;
+  margin-top:6px!important;
+  min-height:16px;
+  font-weight:700!important;
+}
+#singleRolePanel .srp-row{
+  display:flex!important;
+  gap:6px!important;
+  margin-top:7px!important;
+}
+#singleRolePanel .srp-row button{flex:1!important;min-height:40px!important}
+#singleRolePanel .srp-form input,
+#singleRolePanel .srp-form select{box-sizing:border-box!important;width:100%!important}
+</style>
+<style id="give-coins-cooldown-style">
+#singleRolePanel button:disabled{
+  opacity:.55!important;
+  cursor:not-allowed!important;
+}
+.give-coins-cooldown{
+  width:100%;
+}
+</style>
+
+<style id="prize-spin-final-style">
+.prize-spinning,.prize-spinning *,.spinning,.spinning *{
+  color:inherit !important;
+}
+</style>
+
+<style id="prize-reward-normal-color-final">
+#prizeModal .robux-reward,
+#prizeModal .roblox-reward,
+#prizeModal .prize-reward,
+#prizeModal .reward,
+.prize-reward,
+.robux-reward,
+.roblox-reward{
+  color: inherit !important;
 }
 </style>
 </head>
 <body>
 <header>
-<h1>💰 InjuriesX2</h1><p>Economy Game</p>
-<div class="online"><span class="dot"></span>Game Online</div>
+<h1>💰 InjuriesX2</h1><p>Roblox rewards</p>
+<div class="online"><span class="dot"></span>Online</div>
 </header>
 
 <main class="container">
 <section id="auth" class="card auth">
-<div class="refresh-under-challenge" style="margin:14px 0;text-align:center;"><button id="refreshBtn" class="small">🔄 Refresh</button></div><h2>👋 Welcome</h2><div class="sub">Login or create your account</div>
+<h2>👋 Welcome</h2><div class="sub">Login or create your account</div>
 <div class="tabs">
 <button id="loginTab" class="tab active">🔑 Login</button>
 <button id="registerTab" class="tab">👤 Create Account</button>
@@ -205,7 +278,8 @@ textarea{resize:vertical;min-height:80px}
 </section>
 
 <section class="card">
-<div class="leader-top"><h2>🏆 Leaderboard</h2></div>
+<div class="leader-top"><h2>🏆 Leaderboard</h2><div id="leaderboardAutoText" style="text-align:center;font-size:12px;opacity:.8;margin:4px 0 8px">Auto refresh in <span id="leaderboardCountdown">30</span> seconds</div></div>
+
 <div id="leaderboard"></div>
 </section>
 </main>
@@ -229,7 +303,7 @@ textarea{resize:vertical;min-height:80px}
 
 const USERS_KEY="injuriesx2_users_v3";
 const SESSION_KEY="injuriesx2_session_v3";
-const OWNER="Zeenko";
+const OWNER="InjuriesX2";
 const PASSWORD_COOLDOWN=12*60*60*1000;
 const USERNAME_COOLDOWN=3*24*60*60*1000;
 
@@ -243,7 +317,7 @@ function showLoading(duration,callback){
  let i=0;
  if(dots)dots.textContent=".";
  const timer=setInterval(()=>{i=(i+1)%4;if(dots)dots.textContent=".".repeat(i||1)},180);
- setTimeout(()=>{clearInterval(timer);overlay.classList.add("hidden");if(typeof callback==="function")callback()},duration||700);
+ setTimeout(()=>{clearInterval(timer);overlay.classList.add("hidden");requestAnimationFrame(()=>{if(typeof callback==="function")callback()})},duration||700);
 }
 function loadUsers(){
  try{users=JSON.parse(localStorage.getItem(USERS_KEY)||"{}")}catch(e){users={}}
@@ -262,6 +336,35 @@ function msg(id,text,type=""){const e=document.getElementById(id);if(e){e.textCo
 function esc(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function isOwner(){return !!u()&&key(u().username)===key(OWNER)}
 function isStaff(){return !!u()&&(isOwner()||u().role==="moderator"||u().role==="staff")}
+
+function formatSuspensionTime(ms){
+ const total=Math.max(0,Math.floor(ms/1000));let sec=total;
+ const years=Math.floor(sec/31536000);sec%=31536000;
+ const months=Math.floor(sec/2592000);sec%=2592000;
+ const days=Math.floor(sec/86400);sec%=86400;
+ const hours=Math.floor(sec/3600);sec%=3600;
+ const minutes=Math.floor(sec/60);sec%=60;
+ const parts=[];
+ if(years)parts.push(years+" year"+(years===1?"":"s"));
+ if(months)parts.push(months+" month"+(months===1?"":"s"));
+ if(days)parts.push(days+" day"+(days===1?"":"s"));
+ if(hours)parts.push(hours+" hour"+(hours===1?"":"s"));
+ if(minutes)parts.push(minutes+" minute"+(minutes===1?"":"s"));
+ if(sec||!parts.length)parts.push(sec+" second"+(sec===1?"":"s"));
+ return parts.join(" • ");
+}
+function showInvalidAccount(message){
+ let modal=document.getElementById("invalidAccountModal");
+ if(!modal){
+  modal=document.createElement("div");modal.id="invalidAccountModal";modal.className="modal";
+  modal.innerHTML='<div class="modal-box" style="max-width:360px;text-align:center"><div style="font-size:34px">🔴</div><h3>Account not found</h3><p id="invalidAccountText" class="muted"></p><div style="display:flex;gap:8px;margin-top:14px"><button id="invalidAccountConfirm" class="btn" style="flex:1">Confirm</button><button id="invalidAccountClose" class="small" style="flex:1">Close</button></div></div>';
+  document.body.appendChild(modal);
+  modal.querySelector("#invalidAccountConfirm").onclick=()=>modal.classList.add("hidden");
+  modal.querySelector("#invalidAccountClose").onclick=()=>modal.classList.add("hidden");
+ }
+ modal.querySelector("#invalidAccountText").textContent=message||"We can't find this account.";
+ modal.classList.remove("hidden");
+}
 
 function showLogin(){
  document.getElementById("loginForm").classList.add("active");
@@ -304,9 +407,12 @@ function createAccount(){
 function login(){
  loadUsers();
  const name=norm(document.getElementById("loginUsername").value),pass=document.getElementById("loginPassword").value,k=key(name),x=users[k];
- if(!x)return msg("authMsg","Account not found.","error");
- if(x.banned)return msg("authMsg","This account is banned.","error");
- if(Number(x.suspendedUntil||0)>Date.now())return msg("authMsg","This account is suspended.","error");
+ if(!x){showInvalidAccount("Unvalid account. We can't find this account.");return;}
+ if(x.banned){showInvalidAccount("This account is banned.");return;}
+ if(Number(x.suspendedUntil||0)>Date.now()){
+  const remain=formatSuspensionTime(Number(x.suspendedUntil)-Date.now());
+  msg("authMsg","🔴 This account is suspended. ("+remain+")","error");return;
+ }
  if(x.password!==pass)return msg("authMsg","Incorrect password.","error");
  currentUser=k;localStorage.setItem(SESSION_KEY,currentUser);loadUsers();showLoading(700,openGame);
 }
@@ -322,7 +428,7 @@ function changePassword(){
  x.password=newp;x.lastPasswordChange=Date.now();saveUsers();msg("forgotMsg","Password changed successfully!","success");setTimeout(showLogin,700);
 }
 
-function openGame(){document.getElementById("auth").classList.add("hidden");document.getElementById("game").classList.remove("hidden");update()}
+function openGame(){document.getElementById("auth").classList.add("hidden");document.getElementById("game").classList.remove("hidden");update();if(typeof renderSingleRolePanel==="function")renderSingleRolePanel();if(typeof refreshRolePanelVisibility==="function")refreshRolePanelVisibility()}
 function logout(){currentUser=null;localStorage.removeItem(SESSION_KEY);document.getElementById("game").classList.add("hidden");document.getElementById("auth").classList.remove("hidden");showLogin()}
 
 function update(){
@@ -335,7 +441,7 @@ function update(){
  document.getElementById("bank").textContent=money(x.bank);
  document.getElementById("total").textContent=money(Number(x.cash||0)+Number(x.bank||0));
  setAvatar(document.getElementById("mainAvatar"),x.avatar);
- renderLeaderboard();renderSearch();
+ renderSearch();
 }
 function setAvatar(el,src){el.innerHTML=src?'<img src="'+src+'" alt="PFP">':"👤"}
 
@@ -349,20 +455,49 @@ document.getElementById("changePasswordBtn").onclick=changePassword;
 document.getElementById("logoutBtn").onclick=logout;
 
 document.getElementById("workBtn").onclick=function(){
- const x=u();if(Date.now()-(x.lastWork||0)<45000)return msg("workMsg","Wait before working again.","error");
- const r=Math.floor(Math.random()*1001)+500;x.cash+=r;x.lastWork=Date.now();saveUsers();update();msg("workMsg","💼 You earned "+money(r)+"!","success");
+  const x=u(); if(!x)return;
+  if(Date.now()-(x.lastWork||0)<45000)
+    return msg("workMsg","Wait before working again.","error");
+  showLoading(850,()=>{
+    const reward=Math.floor(Math.random()*1001)+500;
+    x.cash+=reward; x.lastWork=Date.now();
+    saveUsers(); update();
+    msg("workMsg","💼 You earned "+money(reward)+"!","success");
+  });
 };
+
 document.getElementById("crimeBtn").onclick=function(){
- const x=u();if(Date.now()-(x.lastCrime||0)<2000)return msg("crimeMsg","Wait 2 seconds.","error");
- x.lastCrime=Date.now();
- if(Math.random()<.65){const r=Math.floor(Math.random()*1801)+200;x.cash+=r;msg("crimeMsg","🎭 Success! +"+money(r),"success")}
- else{const l=Math.min(x.cash,Math.floor(Math.random()*501)+1);x.cash-=l;msg("crimeMsg","🚨 Failed! -"+money(l),"error")}
- saveUsers();update();
+ const x=u(); if(!x)return;
+ if(Date.now()-(x.lastCrime||0)<2000)return msg("crimeMsg","Wait 2 seconds.","error");
+ showLoading(850,()=>{
+  x.lastCrime=Date.now();
+  if(Math.random()<0.45){
+   const reward=Math.floor(Math.random()*1801)+200;
+   x.cash+=reward;
+   saveUsers();update();
+   msg("crimeMsg","🎭 Success! You earned "+money(reward)+"!","success");
+  }else{
+   const balance=Math.max(0,Math.floor(Number(x.cash)||0));
+   const loss=balance>=1000?Math.min(balance,Math.floor(Math.random()*(balance-1000+1))+1000):balance;
+   x.cash-=loss;
+   saveUsers();update();
+   msg("crimeMsg","🚨 Failed! You lost "+money(loss)+".","error");
+  }
+ });
 };
+
 document.getElementById("dailyBtn").onclick=function(){
- const x=u();if(Date.now()-(x.lastDaily||0)<86400000)return msg("dailyMsg","Daily reward is not ready.","error");
- const r=Math.floor(Math.random()*1001)+1000;x.cash+=r;x.lastDaily=Date.now();saveUsers();update();msg("dailyMsg","🎁 +"+money(r),"success");
+  const x=u(); if(!x)return;
+  if(Date.now()-(x.lastDaily||0)<86400000)
+    return msg("dailyMsg","Daily reward is not ready.","error");
+  showLoading(850,()=>{
+    const reward=Math.floor(Math.random()*1001)+1000;
+    x.cash+=reward; x.lastDaily=Date.now();
+    saveUsers(); update();
+    msg("dailyMsg","🎁 You received "+money(reward)+"!","success");
+  });
 };
+
 document.querySelectorAll(".coinBtn").forEach(b=>b.onclick=function(){
  const x=u(),bet=Math.floor(Number(document.getElementById("coinBet").value)),result=Math.random()<.5?"heads":"tails";
  if(!Number.isFinite(bet)||bet<=0)return msg("coinMsg","Enter a valid bet.","error");
@@ -373,16 +508,18 @@ document.querySelectorAll(".coinBtn").forEach(b=>b.onclick=function(){
 });
 
 document.getElementById("depositBtn").onclick=function(){
- const x=u(),a=Math.floor(Number(document.getElementById("depositAmount").value));
- if(!Number.isFinite(a)||a<=0)return msg("depositMsg","Enter a valid amount.","error");
- if(a>x.cash)return msg("depositMsg","Not enough cash.","error");
- x.cash-=a;x.bank+=a;saveUsers();update();msg("depositMsg","Deposited "+money(a)+".","success");
+  const input=document.getElementById("depositAmount");
+  const r=safeDeposit(input?.value);
+  if(!r.ok){ alert(r.error); return; }
+  if(input)input.value="";
+  update();
 };
 document.getElementById("withdrawBtn").onclick=function(){
- const x=u(),a=Math.floor(Number(document.getElementById("withdrawAmount").value));
- if(!Number.isFinite(a)||a<=0)return msg("withdrawMsg","Enter a valid amount.","error");
- if(a>x.bank)return msg("withdrawMsg","Not enough bank money.","error");
- x.bank-=a;x.cash+=a;saveUsers();update();msg("withdrawMsg","Withdrew "+money(a)+".","success");
+  const input=document.getElementById("withdrawAmount");
+  const r=safeWithdraw(input?.value);
+  if(!r.ok){ alert(r.error); return; }
+  if(input)input.value="";
+  update();
 };
 
 function playNumber(dir){
@@ -431,16 +568,47 @@ document.getElementById("challengeBtn").onclick=function(){
 const MIN_PRIZE_BALANCE = 75000;
 const MIN_PRIZE_RISK = 75000;
 
+function closePrizeBox(){
+ const box=document.getElementById("prizeBox");
+ if(box)box.classList.add("hidden");
+ if(window.__prizeCloseTimer)clearInterval(window.__prizeCloseTimer);
+ window.__prizeCloseTimer=null;
+}
+function prizeCloseMarkup(autoClose){
+ return '<button id="prizeCloseBtn" class="small" style="width:100%;margin-top:10px">Close</button>'+
+   (autoClose?'<div id="prizeCloseCountdown" class="muted" style="text-align:center;margin-top:6px;font-size:12px">Auto close in 10 seconds</div>':'');
+}
+function startPrizeAutoClose(){
+ if(window.__prizeCloseTimer)clearInterval(window.__prizeCloseTimer);
+ let n=10;
+ const el=document.getElementById("prizeCloseCountdown");
+ if(el)el.textContent="Auto close in "+n+" seconds";
+ window.__prizeCloseTimer=setInterval(()=>{
+  n--;
+  const e=document.getElementById("prizeCloseCountdown");
+  if(e)e.textContent="Auto close in "+n+" seconds";
+  if(n<=0){closePrizeBox();}
+ },1000);
+}
+function setupPrizeClose(autoClose){
+ const b=document.getElementById("prizeCloseBtn");
+ if(b)b.onclick=()=>closePrizeBox();
+ if(autoClose)startPrizeAutoClose();
+}
+
 document.getElementById("prizeBtn").onclick=function(){
-  const x=u(), box=document.getElementById("prizeBox"), content=document.getElementById("prizeContent");
-  if(!x||!box||!content)return;
-  const balance=Math.floor(Number(x.cash)||0);
-  if(balance<MIN_PRIZE_BALANCE){
-    box.classList.remove("hidden");
-    content.innerHTML='<div style="text-align:center"><b style="font-size:24px">🔒 KEEP SAVING</b><p>You need at least <b>75,000 coins</b> in your cash balance to spin.</p><p>Your balance: <b>'+money(balance)+'</b></p><p class="muted">Keep earning and saving. Try again when you reach 75,000!</p></div>';
-    return;
-  }
-  box.classList.toggle("hidden");
+ const x=u(), box=document.getElementById("prizeBox"), content=document.getElementById("prizeContent");
+ if(!x||!box||!content)return;
+ if(window.__prizeCloseTimer)clearInterval(window.__prizeCloseTimer);
+ const balance=Math.floor(Number(x.cash)||0);
+ box.classList.remove("hidden");
+ if(balance<MIN_PRIZE_BALANCE){
+  content.innerHTML='<div style="text-align:center"><b style="font-size:24px">🔒 KEEP SAVING</b><p>You need at least <b>75,000 coins</b> in your cash balance to spin.</p><p>Your balance: <b>'+money(balance)+'</b></p><p class="muted">Keep earning and saving. Try again when you reach 75,000!</p></div>'+prizeCloseMarkup(true);
+  setupPrizeClose(true);
+ }else{
+  content.innerHTML='<div style="text-align:center"><b style="font-size:24px">🏆 PRIZE</b><p>Minimum cash balance: <b>75,000 coins</b></p></div>'+prizeCloseMarkup(false);
+  setupPrizeClose(false);
+ }
 };
 
 document.getElementById("choosePrizeBtn").onclick=function(){
@@ -484,9 +652,9 @@ function resolvePrize(type,risk){
       const current=Math.floor(Number(u().cash)||0);
 
       if(result===0){
-        box.innerHTML='<div style="text-align:center"><b style="font-size:28px">💎 0 ROBUX</b><p><b>Description:</b> Try again next time.</p><p>Your balance: <b>'+money(current)+'</b></p><button id="discordPrize" class="btn" style="width:100%">💬 Contact Owner on Discord</button></div>';
+        box.innerHTML='<div style="text-align:center"><b style="font-size:28px">💎 0 ROBUX</b><p><b>Description:</b> Try again next time.</p><p>Your balance: <b>'+money(current)+'</b></p><button id="discordPrize" class="btn" style="width:100%">💬 press to go on Discord</button></div>';
       }else{
-        box.innerHTML='<div style="text-align:center"><b style="font-size:28px">💎 '+result.toLocaleString()+' ROBUX</b><p class="muted">Contact Zeenko to claim the prize.</p><button id="discordPrize" class="btn" style="width:100%">💬 Contact Owner on Discord</button></div>';
+        box.innerHTML='<div style="text-align:center"><b style="font-size:28px">💎 '+result.toLocaleString()+' ROBUX</b><p class="muted">Picture this and go in discord to create a ticket to claim a prize</p><button id="discordPrize" class="btn" style="width:100%">💬 press to go on Discord</button></div>';
       }
       document.getElementById("discordPrize").onclick=()=>window.open("https://discord.gg/PAx6XE8g2y","_blank");
     },2500);
@@ -507,7 +675,7 @@ function resolvePrize(type,risk){
       const final=r<0.20?"VERY GOOD ACCOUNT":r<0.60?"GOOD ACCOUNT":"BAD ACCOUNT";
       const el=document.getElementById("accountRoll");
       if(el)el.textContent="🏆 "+final;
-      box.innerHTML+='<button id="discordPrize" class="btn" style="width:100%;margin-top:10px">💬 Contact Owner on Discord</button><p class="muted" style="text-align:center">Zeenko will manually handle the real prize.</p>';
+      box.innerHTML+='<button id="discordPrize" class="btn" style="width:100%;margin-top:10px">💬 press to go on Discord</button><p class="muted" style="text-align:center">Picture this and go in discord to create a ticket to claim a prize.</p>';
       document.getElementById("discordPrize").onclick=()=>window.open("https://discord.gg/PAx6XE8g2y","_blank");
     },2500);
   }
@@ -536,7 +704,8 @@ function renderSearch(){
     .slice(0,20);
 
   if(!list.length){
-    box.innerHTML='<div class="details">Player not found.</div>';
+    box.innerHTML='<div class="details">🔴 We can\'t find this account.</div>';
+    showInvalidAccount("Unvalid account. We can't find this account.");
     return;
   }
 
@@ -585,7 +754,7 @@ function openViewProfile(name){
   if(likeBtn){likeBtn.style.opacity=mine==="like"?"1":"0.85";likeBtn.style.pointerEvents="auto";}
   if(dislikeBtn){dislikeBtn.style.opacity=mine==="dislike"?"1":"0.85";dislikeBtn.style.pointerEvents="auto";}
   const voteMsg=document.getElementById("voteMsg");
-  if(voteMsg)voteMsg.textContent="";
+  if(voteMsg)voteMsg.textContent=(meKey===key(name))?"Your profile • Likes and dislikes shown above.":"";
 
   document.getElementById("viewProfileModal").classList.remove("hidden");
 }
@@ -650,104 +819,399 @@ document.getElementById("likeBtn").onkeydown=function(e){if(e.key==="Enter"||e.k
 document.getElementById("dislikeBtn").onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();votePlayer("dislike")}};
 
 /* LEADERBOARD — live from saved accounts */
-document.getElementById("refreshBtn").onclick=function(){
-  showLoading(650,()=>{
-    loadUsers();
-    const session=localStorage.getItem(SESSION_KEY);
-    if(session&&users[session])currentUser=session;
-    Object.values(users).forEach(normalizeUserData);
-    renderLeaderboard();
-    renderSearch();
-    if(typeof updateStaff==="function")updateStaff();
-    if(typeof renderSingleRolePanel==="function")renderSingleRolePanel();
-    update();
-    msg("challengeMsg","Leaderboard refreshed.","success");
-  });
-};
+
+
+let leaderboardSnapshot=null;
+function captureLeaderboardSnapshot(){
+ loadUsers();Object.values(users).forEach(normalizeUserData);
+ leaderboardSnapshot=Object.values(users).filter(x=>x&&!x.banned).map(x=>({username:x.username,avatar:x.avatar,role:x.role,cash:Number(x.cash||0),bank:Number(x.bank||0)}));
+}
 
 function renderLeaderboard(){
-  const box=document.getElementById("leaderboard");
-  if(!box)return;
-
-  loadUsers();
-  Object.values(users).forEach(normalizeUserData);
-
-  const list=Object.values(users)
-    .filter(x=>x&&!x.banned)
-    .sort((a,b)=>(Number(b.cash||0)+Number(b.bank||0))-(Number(a.cash||0)+Number(a.bank||0)));
-
-  if(!list.length){
-    box.innerHTML='<div class="details">No players yet.</div>';
-    return;
-  }
-
-  box.innerHTML=list.map((x,i)=>{
-    const total=Number(x.cash||0)+Number(x.bank||0);
-    const roleIcon=key(x.username)===key(OWNER)?"👑":x.role==="moderator"?"🛡️":x.role==="staff"?"⭐":"";
-
-    return '<div class="row leaderboard-player">'+
-      '<div style="text-align:center;font-weight:bold">'+
-        (i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+
-      '</div>'+
-      '<div class="player">'+
-        '<div class="player-avatar">'+
-          (x.avatar?'<img src="'+x.avatar+'" alt="PFP">':"👤")+
-        '</div>'+
-        '<div class="player-name">'+
-          esc(x.username)+' '+roleIcon+
-        '</div>'+
-      '</div>'+
-      '<div class="total">'+money(total)+'</div>'+
-    '</div>';
-  }).join("");
+ const box=document.getElementById("leaderboard");if(!box)return;
+ if(!leaderboardSnapshot)captureLeaderboardSnapshot();
+ const list=leaderboardSnapshot.slice().sort((a,b)=>(Number(b.cash||0)+Number(b.bank||0))-(Number(a.cash||0)+Number(a.bank||0)));
+ if(!list.length){box.innerHTML='<div class="details">No players yet.</div>';return;}
+ box.innerHTML=list.map((x,i)=>{
+  const total=Number(x.cash||0)+Number(x.bank||0);
+  const roleIcon=key(x.username)===key(OWNER)?"👑":x.role==="moderator"?"🛡️":x.role==="staff"?"⭐":"";
+  return '<div class="row leaderboard-player"><div style="text-align:center;font-weight:bold">'+(i<3?["🥇","🥈","🥉"][i]:"#"+(i+1))+'</div><div class="player"><div class="player-avatar">'+(x.avatar?'<img src="'+x.avatar+'" alt="PFP">':"👤")+'</div><div class="player-name">'+esc(x.username)+' '+roleIcon+'</div></div><div class="total leaderboard-amount">'+compactMoney(total)+'</div></div>';
+ }).join("");
 }
 
-/* ORIGINAL SINGLE ROLE PANEL */
+/* FINAL ROLE PANEL FIX — stays open on errors, backs out only after success */
 (function(){
-"use strict";
-function srpMe(){try{return typeof u==="function"?u():null}catch(e){return null}}
-function srpOwner(){const x=srpMe();return !!x && key(x.username)===key(OWNER)}
-function srpMod(){const x=srpMe();return !!x && x.role==="moderator" && Number(x.moderatorUntil||0)>Date.now()}
-function srpStaff(){const x=srpMe();return !!x && x.role==="staff"}
-function srpCan(){return srpOwner()||srpMod()||srpStaff()}
-function srpFind(name){const k=key(name);if(!k)return null;return users[k] || Object.values(users).find(v=>v&&key(v.username)===k) || null}
-function srpSave(){try{saveUsers();}catch(e){}}
-function srpForm(title,fields,action){
- const panel=document.getElementById("singleRolePanel");if(!panel)return;
- const actions=panel.querySelector(".srp-actions"),form=panel.querySelector(".srp-form"),titleEl=panel.querySelector(".srp-title");
- if(actions)actions.style.display="none";if(form)form.classList.remove("hidden");if(titleEl)titleEl.textContent=title;if(!form)return;
- form.innerHTML=fields+'<div class="srp-row"><button class="btn" id="srpConfirm">Confirm</button><button class="small" id="srpClose">Close</button></div>';
- form.querySelector("#srpClose").onclick=srpHome;
- form.querySelector("#srpConfirm").onclick=function(){if(this.dataset.second!=="1"){this.dataset.second="1";this.textContent="Are you sure?";return}action(form)};
-}
-function srpHome(){
- const panel=document.getElementById("singleRolePanel");if(!panel)return;
- const actions=panel.querySelector(".srp-actions"),form=panel.querySelector(".srp-form"),title=panel.querySelector(".srp-title");
- if(actions)actions.style.display="grid";if(form){form.classList.add("hidden");form.innerHTML=""}
- const x=srpMe();if(title)title.textContent=srpOwner()?"👑 Owner — "+x.username:srpMod()?"🛡️ Moderator — "+x.username:"⭐ Staff — "+x.username;
-}
-function f(id,placeholder,type="text"){return '<input id="'+id+'" placeholder="'+placeholder+'" type="'+type+'">'}
-function target(form){return srpFind(form.querySelector("#srpUser").value)}
-function ban(){srpForm("BAN PLAYER",f("srpUser","User?")+f("srpReason","Reason"),form=>{const t=target(form);if(!t)return alert("Player not found.");if(!srpOwner()&&key(t.username)===key(OWNER))return alert("Owner cannot be banned.");t.banned=true;t.banReason=form.querySelector("#srpReason").value.trim()||"Rule violation";t.cash=0;t.bank=0;t.coins=0;t.role="player";t.moderatorUntil=0;srpSave();srpHome();update()})}
-function suspend(){srpForm("SUSPEND PLAYER",f("srpUser","User?")+'<select id="srpDays"><option value="1">1 day</option><option value="2">2 days</option><option value="3">3 days</option><option value="7">7 days</option></select>'+f("srpReason","Reason?"),form=>{const t=target(form);if(!t)return alert("Player not found.");if(Number(t.suspendedUntil||0)>Date.now())return alert("Player is already suspended.");const reason=form.querySelector("#srpReason").value.trim()||"Rule violation";t.suspendedUntil=Date.now()+Number(form.querySelector("#srpDays").value)*86400000;t.suspendReason=reason;if(/bad|abuse|farming|misuse/i.test(reason)){t.role="player";t.moderatorUntil=0}srpSave();srpHome();update()})}
-function give(){srpForm("GIVE PLAYER COINS",f("srpUser","User?")+f("srpAmount","Amount","number"),form=>{const t=target(form),a=Math.floor(Number(form.querySelector("#srpAmount").value));if(!t)return alert("Player not found.");if(!Number.isFinite(a)||a<1)return alert("Invalid amount.");if(!srpOwner()&&a>50000)return alert("Moderator limit is 50,000 coins.");t.cash=Number(t.cash||0)+a;t.coins=Number(t.coins||0)+a;srpSave();srpHome();update()})}
-function hire(role){srpForm(role==="moderator"?"MODERATE PLAYER":"STAFF PLAYER",f("srpUser","User?"),form=>{const t=target(form);if(!t)return alert("Player not found.");if(role==="moderator"){t.role="moderator";t.moderatorUntil=Date.now()+3*60*60*1000}else{t.role="staff";t.moderatorUntil=0}srpSave();srpHome();update()})}
-function simple(title,kind){srpForm(title,f("srpUser","User?"),form=>{const t=target(form);if(!t)return alert("Player not found.");if(kind==="unban"){t.banned=false;t.banReason=""}if(kind==="unsuspend"){t.suspendedUntil=0;t.suspendReason=""}if(kind==="unmod"){t.role="player";t.moderatorUntil=0}if(kind==="unstaff"){t.role="player";t.moderatorUntil=0}srpSave();srpHome();update()})}
-window.renderSingleRolePanel=function(){
- const old=document.getElementById("singleRolePanel");if(old)old.remove();const me=srpMe();if(!me||!srpCan())return;
- const leaderboardCard=document.getElementById("leaderboard")?.closest(".card");if(!leaderboardCard||!leaderboardCard.parentElement)return;
- const panel=document.createElement("section");panel.id="singleRolePanel";panel.innerHTML='<div class="srp-title"></div><div class="srp-actions"></div><div class="srp-form hidden"></div>';
- leaderboardCard.parentElement.insertBefore(panel,leaderboardCard.nextSibling);
- const title=panel.querySelector(".srp-title"),grid=panel.querySelector(".srp-actions");
- title.textContent=srpOwner()?"👑 Owner — "+me.username:srpMod()?"🛡️ Moderator — "+me.username:"⭐ Staff — "+me.username;
- const add=(label,fn)=>{const b=document.createElement("button");b.className="btn";b.textContent=label;b.onclick=fn;grid.appendChild(b)};
- if(srpOwner()){add("Ban People",ban);add("Moderate Player",()=>hire("moderator"));add("Staff Player",()=>hire("staff"));add("Suspend Player",suspend);add("Give Coins",give);add("Unban People",()=>simple("UNBAN PLAYER","unban"));add("Unsuspend Player",()=>simple("UNSUSPEND PLAYER","unsuspend"));add("Unmoderator People",()=>simple("UNMODERATOR PLAYER","unmod"));add("Unstaff People",()=>simple("UNSTAFF PLAYER","unstaff"))}
- else if(srpMod()){add("Ban Player",ban);add("Suspend Player",suspend);add("Give Coins",give)}
- else{add("Suspend Player",suspend);add("Unsuspend Player",()=>simple("UNSUSPEND PLAYER","unsuspend"))}
-};
-function srpInit(){if(typeof loadUsers==="function")loadUsers();renderSingleRolePanel()}
-if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(srpInit,250));else setTimeout(srpInit,250);
-setInterval(()=>{const panel=document.getElementById("singleRolePanel"),form=panel?.querySelector(".srp-form");if(!panel)renderSingleRolePanel()},2000);
+ "use strict";
+
+ function me(){try{return typeof u==="function"?u():null}catch(e){return null}}
+ function owner(x){return !!x&&key(x.username)===key(OWNER)}
+ function moderator(x){return !!x&&x.role==="moderator"&&(!x.moderatorUntil||Number(x.moderatorUntil)>Date.now())}
+ function staff(x){return !!x&&x.role==="staff"}
+
+ function findPlayer(name){
+   const k=key(String(name||"").trim());
+   if(!k)return null;
+   return users[k]||Object.values(users).find(p=>p&&key(p.username)===k)||null;
+ }
+ function save(){try{return saveUsers()}catch(e){return false}}
+
+ function message(panel,text,type){
+   let el=panel.querySelector(".srp-message");
+   if(!el){
+     el=document.createElement("div");
+     el.className="srp-message";
+     const row=panel.querySelector(".srp-row");
+     if(row)row.after(el); else panel.querySelector(".srp-form").appendChild(el);
+   }
+   el.textContent=text;
+   el.style.fontSize="12px";
+   el.style.textAlign="center";
+   el.style.marginTop="6px";
+   el.style.fontWeight="700";
+   el.style.color=type==="success"?"#22c55e":"#ef4444";
+ }
+
+ function home(){
+   const p=document.getElementById("singleRolePanel");if(!p)return;
+   const actions=p.querySelector(".srp-actions"),form=p.querySelector(".srp-form");
+   const title=p.querySelector(".srp-title");
+   if(actions)actions.style.display="grid";
+   if(form){form.classList.add("hidden");form.innerHTML=""}
+   const x=me();
+   if(title&&x)title.textContent=owner(x)?"👑 Owner — "+x.username:moderator(x)?"🛡️ Moderator — "+x.username:"⭐ Staff — "+x.username;
+ }
+
+ function field(id,ph,type){
+   return '<input id="'+id+'" placeholder="'+ph+'" type="'+(type||"text")+'">';
+ }
+
+ /*
+   callback MUST return true for success and false for failure.
+   Failed actions stay on the current form.
+   Successful actions show small green "Successful", then return home.
+ */
+ function begin(title,html,action){
+   const p=document.getElementById("singleRolePanel");if(!p)return;
+   const actions=p.querySelector(".srp-actions"),form=p.querySelector(".srp-form");
+   actions.style.display="none";
+   form.classList.remove("hidden");
+   form.innerHTML=
+     '<div class="srp-form-title">'+title+'</div>'+
+     html+
+     '<div class="srp-row"><button type="button" class="btn" id="srpConfirm">Confirm</button><button type="button" class="small" id="srpClose">Close</button></div>'+
+     '<div class="srp-message" style="font-size:12px;text-align:center;margin-top:6px;font-weight:700"></div>';
+
+   p.querySelector("#srpClose").onclick=function(){
+     if(!p.dataset.busy)home();
+   };
+
+   p.querySelector("#srpConfirm").onclick=function(){
+     const btn=this;
+     if(p.dataset.busy==="1" || btn.disabled)return;
+     p.dataset.busy="1";
+     btn.disabled=true;
+     btn.textContent="Processing...";
+
+     showLoading(700,()=>{
+       let ok=false;
+       try{ok=action(form)===true}catch(e){ok=false;console.error(e)}
+
+       if(ok){
+         message(p,"Successful","success");
+         save();
+         update();
+         setTimeout(()=>{
+           delete p.dataset.busy;
+           home();
+         },700);
+       }else{
+         delete p.dataset.busy;
+         btn.disabled=false;
+         btn.textContent="Confirm";
+       }
+     });
+   };
+ }
+
+ function invalid(form){
+   const p=document.getElementById("singleRolePanel");
+   if(p)message(p,"🔴 Can't search player","error");
+   return false;
+ }
+
+ function target(form){
+   const p=findPlayer(form.querySelector("#srpUser").value);
+   return p||null;
+ }
+
+ function suspend(){
+   begin("SUSPEND PLAYER",
+     field("srpUser","Player username")+
+     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+
+     '<input id="srpDuration" placeholder="Amount" type="number" min="1" value="1">'+
+     '<select id="srpUnit">'+
+     '<option value="minute">Minute(s)</option>'+
+     '<option value="hour">Hour(s)</option>'+
+     '<option value="day" selected>Day(s)</option>'+
+     '<option value="month">Month(s)</option>'+
+     '<option value="year">Year(s)</option>'+
+     '</select></div>'+
+     field("srpReason","Reason"),
+     form=>{
+       const t=target(form);
+       if(!t)return invalid(form);
+
+       const amount=Math.floor(Number(form.querySelector("#srpDuration").value));
+       const unit=form.querySelector("#srpUnit").value;
+       const multipliers={
+         minute:60000,
+         hour:3600000,
+         day:86400000,
+         month:2592000000,
+         year:31536000000
+       };
+
+       if(!Number.isFinite(amount)||amount<1){
+         const p=document.getElementById("singleRolePanel");
+         if(p)message(p,"🔴 Invalid duration","error");
+         return false;
+       }
+       if(Number(t.suspendedUntil||0)>Date.now()){
+         const p=document.getElementById("singleRolePanel");
+         if(p)message(p,"🔴 Player is already suspended","error");
+         return false;
+       }
+
+       t.suspendedUntil=Date.now()+amount*multipliers[unit];
+       t.suspendReason=norm(form.querySelector("#srpReason").value)||"Rule violation";
+       return save()!==false;
+     });
+ }
+
+ function unsuspend(){
+   begin("UNSUSPEND PLAYER",field("srpUser","Player username"),form=>{
+     const t=target(form);if(!t)return invalid(form);
+     t.suspendedUntil=0;t.suspendReason="";
+     return save()!==false;
+   });
+ }
+
+ function ban(){
+   begin("BAN PLAYER",
+     field("srpUser","Player username")+field("srpReason","Reason"),
+     form=>{
+       const t=target(form);if(!t)return invalid(form);
+       if(key(t.username)===key(OWNER)){
+         const p=document.getElementById("singleRolePanel");
+         if(p)message(p,"🔴 Owner cannot be banned","error");
+         return false;
+       }
+       t.banned=true;
+       t.banReason=norm(form.querySelector("#srpReason").value)||"Rule violation";
+       return save()!==false;
+     });
+ }
+
+ function give(){
+   const x=me();
+   const isO=owner(x);
+   const isM=moderator(x);
+
+   if(isM && Number(x.giveCoinsCooldownUntil||0)>Date.now()){
+     begin("GIVE PLAYER COINS",
+       field("srpUser","Player username")+field("srpAmount","Amount (1-50,000)","number"),
+       form=>{
+         const p=document.getElementById("singleRolePanel");
+         const left=Math.max(0,Number(x.giveCoinsCooldownUntil)-Date.now());
+         if(p)message(p,"🔴 Cooldown: "+formatCooldown(left),"error");
+         return false;
+       });
+     return;
+   }
+
+   begin(isO?"GIVE PLAYER COINS":"GIVE PLAYER COINS",
+     field("srpUser","Player username")+
+     field("srpAmount",isO?"Amount (no limit)":"Amount (1-50,000)","number"),
+     form=>{
+       const t=target(form);
+       if(!t)return invalid(form);
+
+       const amount=Math.floor(Number(form.querySelector("#srpAmount").value));
+       if(!Number.isFinite(amount)||amount<1){
+         const p=document.getElementById("singleRolePanel");
+         if(p)message(p,"🔴 Invalid amount","error");
+         return false;
+       }
+
+       /* Owner = unlimited. Moderator = max 50,000. */
+       if(isM && amount>50000){
+         const p=document.getElementById("singleRolePanel");
+         if(p)message(p,"🔴 Moderator limit is 50,000","error");
+         return false;
+       }
+
+       /* Moderator starts a 10-minute cooldown only after a successful gift. */
+       t.cash=Number(t.cash||0)+amount;
+
+       if(isM){
+         x.giveCoinsCooldownUntil=Date.now()+10*60*1000;
+       }
+
+       return save()!==false;
+     });
+ }
+
+ function formatCooldown(ms){
+   let total=Math.ceil(Math.max(0,Number(ms)||0)/1000);
+   const min=Math.floor(total/60);
+   const sec=total%60;
+   return min+"m "+String(sec).padStart(2,"0")+"s";
+ }
+
+ function refreshGiveCoinsCooldown(){
+   const x=me();
+   const panel=document.getElementById("singleRolePanel");
+   if(!x||!panel)return;
+
+   const isM=moderator(x);
+   const until=Number(x.giveCoinsCooldownUntil||0);
+   const btn=[...panel.querySelectorAll("button")].find(b=>b.textContent==="Give Coins");
+
+   if(!isM||!until||until<=Date.now()){
+     if(btn){btn.disabled=false;btn.title="Give Coins";}
+     const old=panel.querySelector(".give-coins-cooldown");
+     if(old)old.remove();
+     return;
+   }
+
+   if(btn){
+     btn.disabled=true;
+     btn.title="Cooldown: "+formatCooldown(until-Date.now());
+   }
+
+   let cd=panel.querySelector(".give-coins-cooldown");
+   if(!cd){
+     cd=document.createElement("div");
+     cd.className="give-coins-cooldown";
+     cd.style.fontSize="12px";
+     cd.style.textAlign="center";
+     cd.style.marginTop="6px";
+     cd.style.fontWeight="700";
+     cd.style.color="#f59e0b";
+     panel.querySelector(".srp-actions").after(cd);
+   }
+   cd.textContent="Give Coins cooldown: "+formatCooldown(until-Date.now());
+ }
+
+ function setRole(role){
+   begin(role==="moderator"?"MODERATE PLAYER":"STAFF PLAYER",
+     field("srpUser","Player username"),
+     form=>{
+       const t=target(form);if(!t)return invalid(form);
+       t.role=role;
+       t.moderatorUntil=role==="moderator"?Date.now()+3*60*60*1000:0;
+       return save()!==false;
+     });
+ }
+
+ function removeRole(role){
+   begin(role==="moderator"?"UNMODERATOR PLAYER":"UNSTAFF PLAYER",
+     field("srpUser","Player username"),
+     form=>{
+       const t=target(form);if(!t)return invalid(form);
+       if(t.role!==role){
+         const p=document.getElementById("singleRolePanel");
+         if(p)message(p,"🔴 Player does not have this role","error");
+         return false;
+       }
+       t.role="player";t.moderatorUntil=0;
+       return save()!==false;
+     });
+ }
+
+ function unban(){
+   begin("UNBAN PLAYER",field("srpUser","Player username"),form=>{
+     const t=target(form);if(!t)return invalid(form);
+     t.banned=false;t.banReason="";
+     return save()!==false;
+   });
+ }
+
+ window.renderSingleRolePanel=function(){
+   const x=me(),isO=owner(x),isM=moderator(x),isS=staff(x);
+   const existing=document.getElementById("singleRolePanel");
+
+   /* Normal player: absolutely no panel. */
+   if(!x||(!isO&&!isM&&!isS)){
+     if(existing)existing.remove();
+     return;
+   }
+
+   const role=isO?"owner":isM?"moderator":"staff";
+   const user=key(x.username);
+
+   /*
+     Never recreate an already-open panel. This prevents the 2-second
+     role check from closing the form while the player is typing/confirming.
+   */
+   if(existing && existing.dataset.role===role && existing.dataset.user===user)return;
+   if(existing)existing.remove();
+
+   const lb=document.getElementById("leaderboard")?.closest(".card");
+   if(!lb||!lb.parentElement)return;
+
+   const p=document.createElement("section");
+   p.id="singleRolePanel";
+   p.dataset.role=role;
+   p.dataset.user=user;
+   p.innerHTML='<div class="srp-title"></div><div class="srp-actions"></div><div class="srp-form hidden"></div>';
+   lb.parentElement.insertBefore(p,lb.nextSibling);
+
+   p.querySelector(".srp-title").textContent=
+     isO?"👑 Owner — "+x.username:
+     isM?"🛡️ Moderator — "+x.username:
+     "⭐ Staff — "+x.username;
+
+   const add=(txt,fn)=>{
+     const b=document.createElement("button");
+     b.type="button";b.className="btn";b.textContent=txt;b.onclick=fn;
+     p.querySelector(".srp-actions").appendChild(b);
+   };
+
+   if(isO){
+     add("Ban Player",ban);
+     add("Moderate Player",()=>setRole("moderator"));
+     add("Staff Player",()=>setRole("staff"));
+     add("Suspend Player",suspend);
+     add("Give Coins",give);
+     add("Unban Player",unban);
+     add("Unsuspend Player",unsuspend);
+     add("Unmoderator Player",()=>removeRole("moderator"));
+     add("Unstaff Player",()=>removeRole("staff"));
+   }else if(isM){
+     add("Ban Player",ban);
+     add("Suspend Player",suspend);
+     add("Give Coins",give);
+   }else{
+     /* Staff ONLY: suspend + unsuspend. */
+     add("Suspend Player",suspend);
+     add("Unsuspend Player",unsuspend);
+   }
+ };
+
+ window.refreshRolePanelVisibility=function(){renderSingleRolePanel()};
+
+ function init(){
+   if(typeof loadUsers==="function")loadUsers();
+   renderSingleRolePanel();
+ }
+ if(document.readyState==="loading")
+   document.addEventListener("DOMContentLoaded",()=>setTimeout(init,250));
+ else
+   setTimeout(init,250);
+
+ /* Role changes are checked, but an open panel is preserved. */
+ setInterval(()=>renderSingleRolePanel(),2000);
 })();
 
 
@@ -879,71 +1343,37 @@ document.getElementById("saveProfileBtn").onclick=function(){
   renderSearch();
 };
 
-/* UNIVERSAL BUTTON LOADING */
-(function(){
-  const skip=new Set([
-    "closeProfileBtn","closeViewProfile","logoutBtn","forgotCloseBtn","likeBtn","dislikeBtn"
-  ]);
-
-  document.addEventListener("click",function(e){
-    const btn=e.target.closest("button");
-    if(!btn||skip.has(btn.id)||btn.disabled)return;
-    if(btn.dataset.autoLoading==="1")return;
-
-    const old=btn.innerHTML;
-    btn.dataset.autoLoading="1";
-    btn.disabled=true;
-
-    const frames=[".","..","...","....","...",".."];
-    let i=0;
-    btn.innerHTML=frames[0];
-
-    const timer=setInterval(()=>{
-      i=(i+1)%frames.length;
-      if(document.body.contains(btn))btn.innerHTML=frames[i];
-    },160);
-
-    setTimeout(()=>{
-      clearInterval(timer);
-      if(document.body.contains(btn)){
-        btn.disabled=false;
-        btn.innerHTML=old;
-        delete btn.dataset.autoLoading;
-      }
-    },850);
-  },true);
-})();
-
-/* ROLE PANEL VISIBILITY FIX
-   Normal players must never see Owner/Moderator/Staff controls.
-   The existing panel contents and permissions are untouched.
+/* BUTTON LOADING
+   Each action calls showLoading(...) before running.
 */
+/* ROLE PANEL VISIBILITY FIX */
 function refreshRolePanelVisibility(){
-  const x=u();
-  const role=x ? String(x.role||"player").toLowerCase() : "player";
-  const owner=!!x && (role==="owner" || key(x.username)===key(OWNER));
-  const moderator=owner || (!!x && role==="moderator" && Number(x.moderatorUntil||0)>Date.now());
-  const staff=moderator || (!!x && role==="staff");
-
-  /* Existing original panel only: do not modify its controls or content. */
-  const panel=document.getElementById("staffPanel");
-  if(panel)panel.classList.toggle("hidden",!staff);
-
-  /* The generated single role panel is also role-gated, but its internals are untouched. */
-  const single=document.getElementById("singleRolePanel");
-  if(single)single.classList.toggle("hidden",!staff);
+  const x=typeof u==="function"?u():null;
+  const panel=document.getElementById("singleRolePanel");
+  if(!panel)return;
+  const owner=!!x&&key(x.username)===key(OWNER);
+  const moderator=!!x&&x.role==="moderator"&&(!x.moderatorUntil||Number(x.moderatorUntil)>Date.now());
+  const staff=!!x&&x.role==="staff";
+  panel.classList.toggle("hidden",!(owner||moderator||staff));
 }
-
-/* Run after every normal UI refresh. */
 const _originalUpdate=window.update;
 if(typeof _originalUpdate==="function"){
   window.update=function(){
-    const r=_originalUpdate.apply(this,arguments);
+    const result=_originalUpdate.apply(this,arguments);
     refreshRolePanelVisibility();
-    return r;
+    return result;
   };
 }
-
+function compactMoney(value){
+ const n=Math.max(0,Number(value)||0);
+ if(n<1000)return String(Math.floor(n));
+ const units=["K","M","B","T"];
+ let v=n,i=-1;
+ while(v>=1000&&i<units.length-1){v/=1000;i++;}
+ let text=v>=100?Math.floor(v).toString():v>=10?v.toFixed(1):v.toFixed(2);
+ text=text.replace(/\.0+$|(?:(\.\d*[1-9])0+)$/,'$1');
+ return text+units[i];
+}
 function normalizeUserData(x){
  x.cash=Math.max(0,Math.floor(Number(x.cash)||0));
  x.bank=Math.max(0,Math.floor(Number(x.bank)||0));
@@ -970,9 +1400,122 @@ saveUsers();
 const session=localStorage.getItem(SESSION_KEY);
 if(session&&users[session]&&!users[session].banned&&Number(users[session].suspendedUntil||0)<=Date.now()){currentUser=session;openGame()}
 else if(session){localStorage.removeItem(SESSION_KEY)}
+captureLeaderboardSnapshot();
 setTimeout(()=>{renderLeaderboard();renderSearch();refreshRolePanelVisibility()},0);
 setInterval(()=>{if(currentUser&&users[currentUser])saveUsers()},5000);
 window.addEventListener("beforeunload",()=>{if(currentUser)saveUsers()});
+
+/* ===== INJURIESX2 PRIZE ODDS FINAL ===== */
+window.getPrizeOdds=function(bid){
+  bid=Number(bid)||0;
+  if(bid<75000) return null;
+
+  if(bid<=100000){
+    return {bad:85,good:10,veryGood:0.5,robuxZero:95,robuxSmall:5};
+  }
+
+  if(bid<=250000){
+    const t=Math.max(0,Math.min(1,(bid-100000)/150000));
+    return {
+      bad:85-55*t,
+      good:10+25*t,
+      veryGood:0.5+25*t,
+      robuxZero:95-60*t,
+      robuxSmall:5+40*t
+    };
+  }
+
+  const t=Math.max(0,Math.min(1,(bid-250000)/750000));
+  return {
+    bad:30-20*t,
+    good:35+10*t,
+    veryGood:25+30*t,
+    robuxZero:35-25*t,
+    robuxSmall:45+25*t
+  };
+};
+
+window.rollPrizeAccount=function(bid){
+  const o=getPrizeOdds(bid);
+  if(!o)return null;
+  const r=Math.random()*100;
+  if(r<o.bad)return "Bad Account";
+  if(r<o.bad+o.good)return "Good Account";
+  if(r<o.bad+o.good+o.veryGood)return "Very Good Account";
+  return "Account";
+};
+
+window.rollPrizeRobux=function(bid){
+  const o=getPrizeOdds(bid);
+  if(!o)return 0;
+  if(Math.random()*100<o.robuxZero)return 0;
+
+  const b=Number(bid)||0;
+  let max;
+  if(b<=100000) max=100;
+  else if(b<=250000) max=Math.round(100+(b-100000)/150000*2400);
+  else max=Math.round(2500+Math.min(7500,(b-250000)/750000*7500));
+
+  max=Math.max(1,Math.min(10000,max));
+  return Math.floor(Math.random()*max)+1;
+};
+
+
+/* ===== BANK TRANSACTIONS FINAL FIX ===== */
+(function(){
+  function currentUser(){
+    try{return typeof u==="function"?u():null}catch(e){return null}
+  }
+  function num(v){
+    const n=Number(v);
+    return Number.isFinite(n)?n:0;
+  }
+
+  window.safeDeposit=function(rawAmount){
+    const me=currentUser();
+    if(!me)return {ok:false,error:"Please login first."};
+
+    const amount=Math.floor(Number(rawAmount));
+    if(!Number.isFinite(amount)||amount<=0)
+      return {ok:false,error:"Invalid deposit amount."};
+
+    const cash=num(me.cash);
+    if(amount>cash)
+      return {ok:false,error:"Not enough cash."};
+
+    /* Atomic single update: cash down once, bank up once. */
+    me.cash=cash-amount;
+    me.bank=num(me.bank)+amount;
+
+    try{ if(typeof saveUsers==="function") saveUsers(); }catch(e){}
+    try{ if(typeof update==="function") update(); }catch(e){}
+
+    return {ok:true,amount};
+  };
+
+  window.safeWithdraw=function(rawAmount){
+    const me=currentUser();
+    if(!me)return {ok:false,error:"Please login first."};
+
+    const amount=Math.floor(Number(rawAmount));
+    if(!Number.isFinite(amount)||amount<=0)
+      return {ok:false,error:"Invalid withdraw amount."};
+
+    const bank=num(me.bank);
+    if(amount>bank)
+      return {ok:false,error:"Not enough bank balance."};
+
+    /* Atomic single update: bank down once, cash up once. */
+    me.bank=bank-amount;
+    me.cash=num(me.cash)+amount;
+
+    try{ if(typeof saveUsers==="function") saveUsers(); }catch(e){}
+    try{ if(typeof update==="function") update(); }catch(e){}
+
+    return {ok:true,amount};
+  };
+})();
+
 </script>
 
 <div id="loadingOverlay" class="modal hidden">
@@ -981,6 +1524,30 @@ window.addEventListener("beforeunload",()=>{if(currentUser)saveUsers()});
     <div class="muted" style="margin-top:8px">Please wait...</div>
   </div>
 </div>
+
+<script id="leaderboardAutoRefreshFinal"><!---->
+(function(){
+ let remaining=30;
+ setInterval(function(){
+  const el=document.getElementById("leaderboardCountdown");
+  if(el)el.textContent=remaining;
+  if(remaining<=0){
+   try{
+    captureLeaderboardSnapshot();
+    renderLeaderboard();
+    renderSearch();
+    if(typeof refreshRolePanelVisibility==="function")refreshRolePanelVisibility();
+   }catch(e){console.error(e)}
+   remaining=30;
+  }else remaining--;
+ },1000);
+ /* Only updates the cooldown display; it never rebuilds the panel. */
+ const giveCoinsCooldownTimer=setInterval(refreshGiveCoinsCooldown,1000);
+ setTimeout(refreshGiveCoinsCooldown,300);
+
+})();
+</script>
 </body>
 </html>
+
 
